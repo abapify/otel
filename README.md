@@ -1,2 +1,5 @@
-# otel
-ABAP Open telemetry
+# ABAP Open telemetry
+
+ABAP Telemetry minimalistic implementation
+
+WIP
