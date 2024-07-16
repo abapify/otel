@@ -1,73 +1,73 @@
-CLASS zcl_otel_trace DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PRIVATE .
+class zcl_otel_trace definition
+  public
+  final
+  create private .
 
-  PUBLIC SECTION.
-    INTERFACES zif_otel_trace_api.
-    CLASS-DATA api TYPE REF TO zif_otel_trace_api READ-ONLY.
-    CLASS-METHODS: class_constructor.
+  public section.
+    interfaces zif_otel_trace_api.
+    class-data api type ref to zif_otel_trace_api read-only.
+    class-methods: class_constructor.
 
-  PROTECTED SECTION.
-  PRIVATE SECTION.
+  protected section.
+  private section.
 
-    METHODS constructor.
+    methods constructor.
 
-    DATA delegate_processor TYPE REF TO zif_otel_trace_processor.
-    DATA delegate_provider TYPE REF TO zif_otel_trace_provider.
+    data delegate_processor type ref to zif_otel_trace_processor.
+    data delegate_provider type ref to zif_otel_trace_provider.
 
 
-    METHODS:
-      on_span_start FOR EVENT span_start OF zcl_otel_tracer
-        IMPORTING span,
-      on_span_end FOR EVENT span_end OF zcl_otel_tracer
-        IMPORTING span,
-      on_span_event FOR EVENT span_event OF zcl_otel_tracer
-        IMPORTING span.
+    methods:
+      on_span_start for event span_start of zcl_otel_tracer
+        importing span,
+      on_span_end for event span_end of zcl_otel_tracer
+        importing span,
+      on_span_event for event span_event of zcl_otel_tracer
+        importing span_event.
 
-ENDCLASS.
+endclass.
 
-CLASS zcl_otel_trace IMPLEMENTATION.
+class zcl_otel_trace implementation.
 
-  METHOD constructor.
-    DATA(lo_delegate) = NEW lcl_trace_processor(  ).
+  method constructor.
+    data(lo_delegate) = new lcl_trace_processor(  ).
     me->delegate_processor = lo_delegate.
     me->delegate_provider = lo_delegate.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD class_constructor.
+  method class_constructor.
 
-    api = NEW zcl_otel_trace( ).
+    api = new zcl_otel_trace( ).
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_otel_trace_api~get_tracer.
+  method zif_otel_trace_api~get_tracer.
 
-    DATA(tracer) = NEW zcl_otel_tracer(  ).
+    data(tracer) = new zcl_otel_tracer(  ).
 
-    SET HANDLER
+    set handler
         on_span_start
         on_span_event
-        on_span_end FOR tracer.
+        on_span_end for tracer.
 
     result = tracer.
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD on_span_end.
+  method on_span_end.
     delegate_processor->on_span_end( span = span ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD on_span_event.
-    delegate_processor->on_span_event( span = span ).
-  ENDMETHOD.
+  method on_span_event.
+    delegate_processor->on_span_event( span_event = span_event ).
+  endmethod.
 
-  METHOD on_span_start.
+  method on_span_start.
     delegate_processor->on_span_start( span = span ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_otel_trace_provider~use.
+  method zif_otel_trace_provider~use.
     delegate_provider->use( processor ).
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

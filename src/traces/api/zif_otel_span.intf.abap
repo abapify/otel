@@ -1,20 +1,29 @@
-INTERFACE zif_otel_span
-  PUBLIC .
+interface zif_otel_span
+  public .
 
-  INTERFACEs zif_otel_span_context.
+  interfaces zif_otel_span_context.
 
-   " Span Id
-  aliases SPAN_ID for zif_otel_span_context~span_id.
+  " Span Id
+  aliases span_id for zif_otel_span_context~span_id.
   " Trace id
-  aliases trace_ID for zif_otel_span_context~trace_ID.
+  aliases trace_id for zif_otel_span_context~trace_id.
 
-  data NAME type STRING read-only .
-  data START_TIME type TIMESTAMPL read-only .
-  data END_TIME type TIMESTAMPL read-only .
-  data PARENT_SPAN_ID like SPAN_ID read-only .
+  data name type string read-only .
+  data start_time type timestampl read-only .
+  data end_time type timestampl read-only .
+  data parent_span_id like span_id read-only .
 
-  METHODS end
-   importing
-      value(END_TIME) type TIMESTAMPL optional.
+  data events type table of ref to zif_otel_span_event with empty key read-only.
+  data links type table of ref to zif_otel_span_link with empty key read-only.
 
-ENDINTERFACE.
+  methods end
+    importing
+      value(end_time) type timestampl optional.
+
+  methods log
+    importing name type string.
+
+  methods link
+    importing context type ref to zif_otel_span_context.
+
+endinterface.

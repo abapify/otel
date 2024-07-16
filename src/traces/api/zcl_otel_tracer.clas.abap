@@ -1,58 +1,58 @@
-CLASS zcl_otel_tracer DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PRIVATE global FRIENDS zcl_otel_trace.
+class zcl_otel_tracer definition
+  public
+  final
+  create private global friends zcl_otel_trace.
 
-  PUBLIC SECTION.
-  INTERFACES zif_otel_tracer.
-  PROTECTED SECTION.
-  PRIVATE SECTION.
+  public section.
+    interfaces zif_otel_tracer.
+  protected section.
+  private section.
 
-  METHODS:
-    on_span_end for event span_end of zcl_otel_span
-        IMPORTING sender,
-    on_span_event for event span_event of zcl_otel_span
-        IMPORTING sender.
+    methods:
+      on_span_end for event span_end of zcl_otel_span
+        importing sender,
+      on_span_event for event span_event of zcl_otel_span
+        importing event.
 
-  EVENTS:
-     span_start EXPORTING value(span) type ref to zif_otel_span,
-     span_end EXPORTING value(span) type ref to zif_otel_span,
-     span_event EXPORTING value(span) type ref to zif_otel_span.
+    events:
+      span_start exporting value(span) type ref to zif_otel_span,
+      span_end exporting value(span) type ref to zif_otel_span,
+      span_event exporting value(span_event) type ref to zif_otel_span_event.
 
-ENDCLASS.
+endclass.
 
 
 
-CLASS zcl_otel_tracer IMPLEMENTATION.
+class zcl_otel_tracer implementation.
 
-  METHOD zif_otel_tracer~start_span.
+  method zif_otel_tracer~start_span.
 
-     data(span) = new zcl_otel_span(
-        name       = name
+    data(span) = new zcl_otel_span(
+       name       = name
 *        start_time = start_time
-        context    = context
-      ).
+       context    = context
+     ).
 
-      set handler on_span_end on_span_event for span.
+    set handler on_span_end on_span_event for span.
 
-      result = span.
+    result = span.
 
-      RAISE EVENT span_start EXPORTING span = span.
+    raise event span_start exporting span = span.
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD on_span_end.
+  method on_span_end.
 
-    set handler on_span_end on_span_event for sender ACTIVATION ' '.
+    set handler on_span_end on_span_event for sender activation ' '.
 
-    RAISE EVENT span_end EXPORTING span = sender.
+    raise event span_end exporting span = sender.
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD on_span_event.
+  method on_span_event.
 
-     raise EVENT span_event EXPORTING span = sender.
+    raise event span_event exporting span_event = event.
 
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

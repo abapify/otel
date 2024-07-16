@@ -1,13 +1,13 @@
-INTERFACE zif_otel_trace_processor
-  PUBLIC .
+interface zif_otel_trace_processor
+  public .
 
-    METHODS on_span_start
-        IMPORTING span TYPE REF TO zif_otel_span.
+  methods on_span_start
+    importing span type ref to zif_otel_span.
 
-    METHODS on_span_event
-        IMPORTING span TYPE REF TO zif_otel_span.
+  methods on_span_event
+    importing span_event type ref to zif_otel_span_event.
 
-    METHODS on_span_end
-        IMPORTING span TYPE REF TO zif_otel_span.
+  methods on_span_end
+    importing span type ref to zif_otel_span.
 
-ENDINTERFACE.
+endinterface.
