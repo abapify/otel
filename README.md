@@ -2,4 +2,6 @@
 
 ABAP Telemetry minimalistic implementation
 
-WIP
+## Dependencies
+
+- [assert](https://github.com/abapify/assert) lib is used in unit tests
