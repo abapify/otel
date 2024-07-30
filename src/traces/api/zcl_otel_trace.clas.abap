@@ -59,7 +59,7 @@ class zcl_otel_trace implementation.
   endmethod.
 
   method on_span_event.
-    delegate_processor->on_span_event( span_event = span_event ).
+    delegate_processor->on_span_event( event = span_event ).
   endmethod.
 
   method on_span_start.

@@ -20,7 +20,7 @@ class lcl_trace_processor implementation.
   endmethod.
   method zif_otel_trace_processor~on_span_event.
     loop at processors into data(processor).
-      processor->on_span_event( span_event = span_event ).
+      processor->on_span_event( event = event ).
     endloop.
   endmethod.
   method zif_otel_trace_processor~on_span_end.
