@@ -5,6 +5,8 @@ class zcl_otel_http_exporter definition
   public section.
     interfaces zif_otel_msg_bus all methods final.
 
+    events message_published exporting value(message) type ref to zif_otel_msg.
+
   protected section.
     methods destination abstract returning value(result) type ref to zif_fetch_destination.
     methods client returning value(client) type ref to zif_fetch_client raising cx_static_check.
@@ -16,13 +18,15 @@ class zcl_otel_http_exporter definition
     methods content_type abstract returning value(content_type) type string.
   private section.
 
-endclass.
+ENDCLASS.
 
-class zcl_otel_http_exporter implementation.
+CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
+
   method client.
     data(destination) = destination( ).
     client = destination->client( ).
   endmethod.
+
 
   method request.
     data(lo_request) = client->request( ).
@@ -37,5 +41,10 @@ class zcl_otel_http_exporter implementation.
     data(client) = client( ).
     data(request) = request( client = client message = message ).
     data(response) = client->fetch( request ).
+
+    raise event message_published
+      exporting
+        message = message
+    .
   endmethod.
-endclass.
+ENDCLASS.
