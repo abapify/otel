@@ -1,5 +1,5 @@
 *"* use this source file for your ABAP unit test classes
-class ltcl_main definition inheriting from zcl_assert
+class ltcl_main definition inheriting from zcl_assertable_unit
     final for testing
   duration short
   risk level harmless.
