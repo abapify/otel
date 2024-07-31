@@ -1,7 +1,7 @@
 class zcl_abap2otel_span_processor definition
 inheriting from zcl_otel_trace_processor
   public
-  final
+
   create public .
 
   public section.

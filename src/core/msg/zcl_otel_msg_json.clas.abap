@@ -32,4 +32,8 @@ class zcl_otel_msg_json implementation.
     result = json->get_output( ).
 
   endmethod.
+  method zif_otel_msg~content_type.
+    content_type = 'application/json'.
+  endmethod.
+
 endclass.
