@@ -8,18 +8,16 @@ class zcl_otel_http_exporter definition
     events message_published exporting value(message) type ref to zif_otel_msg.
 
     types destination_type type ref to zif_fetch_destination.
+
     methods
         constructor importing
         " destination is optinal because this class may be redefined
         " alternative pattern is to redefine destination( ) method
         destination type destination_type optional
-        " static path
-        " also could be redefined in a method
-        path type string.
+        preferred parameter destination.
 
   protected section.
     methods destination returning value(destination) type ref to zif_fetch_destination.
-    methods path returning value(path) type string.
     methods client returning value(client) type ref to zif_fetch_client raising cx_static_check.
     methods request
       importing client type ref to zif_fetch_client
@@ -32,16 +30,14 @@ class zcl_otel_http_exporter definition
 
 
   data _destination type destination_type.
-  data _path type string.
+
 
 ENDCLASS.
 
+
+
 CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
 
-   METHOD constructor.
-    me->_destination = destination.
-    me->_path = path.
-  ENDMETHOD.
 
   method client.
     data(destination) = destination( ).
@@ -52,12 +48,14 @@ CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
     client = destination->client( ).
   endmethod.
 
-  METHOD destination.
-    destination = me->_destination.
+
+   METHOD constructor.
+    me->_destination = destination.
   ENDMETHOD.
 
-  METHOD path.
-    path = me->_path.
+
+  METHOD destination.
+    destination = me->_destination.
   ENDMETHOD.
 
   method request.
@@ -67,15 +65,15 @@ CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
     lo_request->method( method = 'POST' ).
     " body we can fill right now already too
     lo_request->body( message->get_binary( ) ).
-    " if static path is provided - we can take it
-    data(path) = me->path(  ).
-    if path is not initial.
-       lo_request->path( path ).
-    endif.
-
     lo_request->header( name = 'Content-Type' value = message->content_type( ) ).
     request = lo_request.
   endmethod.
+
+
+  METHOD throw.
+    new zcl_throw( )->throw( message ).
+  ENDMETHOD.
+
 
   method zif_otel_msg_bus~publish.
     data(client) = client( ).
@@ -87,9 +85,4 @@ CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
         message = message
     .
   endmethod.
-
-  METHOD throw.
-    new zcl_throw( )->throw( message ).
-  ENDMETHOD.
-
 ENDCLASS.
