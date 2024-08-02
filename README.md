@@ -19,7 +19,7 @@ You can use span as a context for a child span
 ```abap
 data(child_span)  = trace->start_span( name = 'Child span' context = span ).
 ```
-By default this model is stateless - it's just raising ABAP events. To start handlind these events our framework supports so called "plugins" or "middleware".
+By default this model is stateless - it's just raising ABAP events. To start handling these events our framework supports so called "plugins" or "middleware".
 ```abap
 zcl_otel_trace=>api->use( your_handler_instance ).
 zcl_otel_trace=>api->use( one_more_handler_instance ).
