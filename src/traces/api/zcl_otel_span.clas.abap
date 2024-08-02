@@ -28,9 +28,13 @@ class zcl_otel_span definition
     events span_end.
     events span_event exporting value(event) type ref to zif_otel_span_event.
 
-endclass.
+ENDCLASS.
 
-class zcl_otel_span implementation.
+
+
+CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
+
+
   method constructor.
 
     " span start time
@@ -61,12 +65,13 @@ class zcl_otel_span implementation.
 
     " span Id always unique
     " there is no out of the box function to generate 8-byte uuid
-    me->span_id = lcl_randomizer=>generate_hex( 16 ).
+    me->span_id = lcl_randomizer=>generate_hex( 8 ).
 
     me->name = name.
 
 
   endmethod.
+
 
   method zif_otel_span~end.
 
@@ -82,6 +87,14 @@ class zcl_otel_span implementation.
 
   endmethod.
 
+
+  method zif_otel_span~link.
+    data(link) = new lcl_span_link( ).
+    link->context = context.
+    append link to me->links.
+  endmethod.
+
+
   method zif_otel_span~log.
 
     data(event) = new lcl_span_event( ).
@@ -93,11 +106,4 @@ class zcl_otel_span implementation.
     raise event span_event exporting event = event.
 
   endmethod.
-
-  method zif_otel_span~link.
-    data(link) = new lcl_span_link( ).
-    link->context = context.
-    append link to me->links.
-  endmethod.
-
-endclass.
+ENDCLASS.

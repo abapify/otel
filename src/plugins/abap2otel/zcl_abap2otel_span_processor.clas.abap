@@ -25,16 +25,11 @@ inheriting from zcl_otel_trace_processor
       returning
         value(result) type abap_bool.
     data buffer type buffer_type.
-endclass.
+ENDCLASS.
 
-class zcl_abap2otel_span_processor implementation.
 
-  method get_buffer.
-    if me->buffer is not bound.
-      me->buffer = new #( ).
-    endif.
-    result = me->buffer.
-  endmethod.
+
+CLASS ZCL_ABAP2OTEL_SPAN_PROCESSOR IMPLEMENTATION.
 
 
   method constructor.
@@ -46,6 +41,36 @@ class zcl_abap2otel_span_processor implementation.
   endmethod.
 
 
+  method flush.
+
+    check me->buffer is bound.
+    check me->buffer->size( ) is not initial.
+
+    try.
+        message_bus->publish( me->buffer ).
+        clear me->buffer.
+      catch cx_static_check into data(lo_cx).
+        " we cannot raise an exception because processor is not supposed to stop handlings traces
+        throw_cx( lo_cx ).
+    endtry.
+  endmethod.
+
+
+  method get_buffer.
+    if me->buffer is not bound.
+      me->buffer = new #( ).
+    endif.
+    result = me->buffer.
+  endmethod.
+
+
+  method ready_to_publish.
+
+    result = xsdbool( me->get_buffer(  )->size(  ) ge me->batch_size ).
+
+  endmethod.
+
+
   method zif_otel_trace_processor~on_span_end.
     check message_bus is bound.
     " introducing buffer for spans
@@ -53,9 +78,9 @@ class zcl_abap2otel_span_processor implementation.
 
     buffer->add_span( value #(
       name           = span->name
-      span_id        = span->span_id
-      trace_id       = span->trace_id
-      parent_span_id = span->parent_span_id
+      span_id        = to_lower( conv string( span->span_id ) )
+      trace_id       = to_lower( conv string( span->trace_id ) )
+      parent_span_id = to_lower( conv string( span->parent_span_id ) )
       start_time     = span->start_time
       end_time       = span->end_time
       "attrs          = span->attributes
@@ -77,25 +102,4 @@ class zcl_abap2otel_span_processor implementation.
       flush(  ).
     endif.
   endmethod.
-
-  method ready_to_publish.
-
-    result = xsdbool( me->get_buffer(  )->size(  ) ge me->batch_size ).
-
-  endmethod.
-
-  method flush.
-
-    check me->buffer is bound.
-    check me->buffer->size( ) is not initial.
-
-    try.
-        message_bus->publish( me->buffer ).
-        clear me->buffer.
-      catch cx_static_check into data(lo_cx).
-        " we cannot raise an exception because processor is not supposed to stop handlings traces
-        throw_cx( lo_cx ).
-    endtry.
-  endmethod.
-
-endclass.
+ENDCLASS.
