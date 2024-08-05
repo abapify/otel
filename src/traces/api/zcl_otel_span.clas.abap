@@ -24,17 +24,14 @@ class zcl_otel_span definition
     aliases end_time for zif_otel_span~end_time.
     aliases events for zif_otel_span~events.
     aliases links for zif_otel_span~links.
+    aliases status for zif_otel_span~status.
 
     events span_end.
     events span_event exporting value(event) type ref to zif_otel_span_event.
 
-ENDCLASS.
+endclass.
 
-
-
-CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
-
-
+class zcl_otel_span implementation.
   method constructor.
 
     " span start time
@@ -65,17 +62,18 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
 
     " span Id always unique
     " there is no out of the box function to generate 8-byte uuid
-    me->span_id = lcl_randomizer=>generate_hex( 8 ).
+    me->span_id = lcl_randomizer=>generate_hex( 16 ).
 
     me->name = name.
 
 
   endmethod.
 
-
   method zif_otel_span~end.
 
     check me->end_time is initial.
+
+    me->status = status.
 
     if end_time is initial.
       get time stamp field end_time.
@@ -86,14 +84,6 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
     raise event span_end.
 
   endmethod.
-
-
-  method zif_otel_span~link.
-    data(link) = new lcl_span_link( ).
-    link->context = context.
-    append link to me->links.
-  endmethod.
-
 
   method zif_otel_span~log.
 
@@ -106,4 +96,19 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
     raise event span_event exporting event = event.
 
   endmethod.
-ENDCLASS.
+
+  method zif_otel_span~link.
+    data(link) = new lcl_span_link( ).
+    link->context = context.
+    append link to me->links.
+  endmethod.
+
+  method zif_otel_span~fail.
+
+    me->zif_otel_span~end(
+        status = me->zif_otel_span~span_status-error
+    ).
+
+  endmethod.
+
+endclass.

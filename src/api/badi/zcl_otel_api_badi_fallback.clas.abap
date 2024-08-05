@@ -25,7 +25,7 @@ class zcl_otel_api_badi_fallback implementation.
   endmethod.
 
   method zif_otel_api~traces.
-    throw( 'Traces API is not implemented. Please create ZOTEL_API_BADI implementation.' ).
+    result = zcl_otel_trace=>api.
   endmethod.
 
   method throw.
