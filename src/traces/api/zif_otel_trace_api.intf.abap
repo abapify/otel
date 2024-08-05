@@ -1,10 +1,10 @@
 INTERFACE zif_otel_trace_api
   PUBLIC .
 
-    INTERFACES zif_otel_trace_provider.
+    " get tracer
+    methods get_tracer returning value(result) type ref to zif_otel_tracer.
 
-    METHODS get_tracer IMPORTING name TYPE string OPTIONAL RETURNING VALUE(result) TYPE REF TO zif_otel_tracer.
-
-    ALIASES USE FOR zif_otel_trace_provider~use.
+    " use processor
+    METHODS use IMPORTING processor TYPE REF TO zif_otel_trace_processor.
 
 ENDINTERFACE.

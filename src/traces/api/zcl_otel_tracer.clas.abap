@@ -1,7 +1,7 @@
 class zcl_otel_tracer definition
   public
   final
-  create private global friends zcl_otel_trace.
+  create private global friends zcl_otel_trace_controller.
 
   public section.
     interfaces zif_otel_tracer.
