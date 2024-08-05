@@ -51,4 +51,5 @@ class zcl_otel_trace_controller implementation.
     result = tracer.
   endmethod.
 
+
 endclass.
