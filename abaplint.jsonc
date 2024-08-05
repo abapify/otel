@@ -3,6 +3,10 @@
     "files": "/src/**/*.*"
   },
   "dependencies": [
+      {
+        "url": "https://github.com/abapify/fetch",
+        "files": "/src/**/*.*"
+      },
     {
       "url": "https://github.com/abapify/assert",
       "files": "/src/**/*.*"
