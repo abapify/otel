@@ -25,9 +25,54 @@ class zcl_otel_tracer definition
       span_end exporting value(span) type ref to zif_otel_span,
       span_event exporting value(span_event) type ref to zif_otel_span_event.
 
-endclass.
+ENDCLASS.
 
-class zcl_otel_tracer implementation.
+
+
+CLASS ZCL_OTEL_TRACER IMPLEMENTATION.
+
+
+  method constructor.
+
+    me->span_stack = new zcl_otel_stack(  ).
+
+  endmethod.
+
+
+  method on_span_end.
+
+    set handler on_span_end on_span_event for sender activation ' '.
+
+    me->span_stack->pop(  ).
+
+    raise event span_end exporting span = sender.
+
+  endmethod.
+
+
+  method on_span_event.
+
+    raise event span_event exporting span_event = event.
+
+  endmethod.
+
+
+  method zif_otel_has_context~context.
+
+    data(last_span) = me->span_stack->last( ).
+    check last_span is bound.
+
+*    field-symbols <last_span> type ref to object.
+    assign last_span->* to field-symbol(<last_span>).
+    check <last_span> is assigned.
+
+    try.
+      result = cast #( <last_span> ).
+      catch cx_sy_move_cast_error.
+    endtry.
+
+  endmethod.
+
 
   method zif_otel_tracer~start_span.
 
@@ -46,40 +91,4 @@ class zcl_otel_tracer implementation.
     raise event span_start exporting span = span.
 
   endmethod.
-
-  method on_span_end.
-
-    set handler on_span_end on_span_event for sender activation ' '.
-
-    me->span_stack->pop(  ).
-
-    raise event span_end exporting span = sender.
-
-  endmethod.
-
-  method on_span_event.
-
-    raise event span_event exporting span_event = event.
-
-  endmethod.
-
-  method constructor.
-
-    me->span_stack = new zcl_otel_stack(  ).
-
-  endmethod.
-
-  method zif_otel_has_context~context.
-
-    types span_ref type ref to zif_otel_span.
-
-    try.
-        data(last_span) = cast span_ref( me->span_stack->last( ) ).
-        check last_span is bound.
-        result = last_span->*.
-      catch cx_sy_move_cast_error.
-    endtry.
-
-  endmethod.
-
-endclass.
+ENDCLASS.

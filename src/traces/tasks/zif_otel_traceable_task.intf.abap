@@ -1,7 +1,14 @@
-interface zif_otel_traceable_task
+interface ZIF_OTEL_TRACEABLE_TASK
   public .
+
+
     " execute with trace
-    methods execute
-      importing span type ref to zif_otel_span
-      raising cx_static_check.
+  methods EXECUTE
+    importing
+      !SPAN type ref to ZIF_OTEL_SPAN
+    raising
+      CX_STATIC_CHECK .
+  methods SPAN_NAME
+    returning
+      value(SPAN_NAME) type STRING .
 endinterface.

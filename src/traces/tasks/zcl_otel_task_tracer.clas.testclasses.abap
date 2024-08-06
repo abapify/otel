@@ -18,18 +18,22 @@ endclass.
 
 class ltcl_tracer implementation.
   method test_ok.
-    new zcl_otel_task_tracer( 'Test span' )->execute_task( me ).
+    new zcl_otel_task_tracer( )->execute_task( me ).
 *    catch cx_static_check.
     assert( me->executed )->true( ).
   endmethod.
   method test_failed_with_cx.
     me->must_fail = abap_true.
     try.
-        new zcl_otel_task_tracer( 'Test span' )->execute_task( me ).
+        new zcl_otel_task_tracer( )->execute_task( me ).
       catch ltcx_error into data(lo_cx).
     endtry.
     assert( lo_cx )->bound( ).
     assert( me->executed )->false( ).
+  endmethod.
+
+  method zif_otel_traceable_task~span_name.
+    span_name = 'Test traceable task'.
   endmethod.
 
   method zif_otel_traceable_task~execute.
