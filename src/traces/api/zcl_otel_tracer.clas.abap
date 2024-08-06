@@ -75,6 +75,7 @@ class zcl_otel_tracer implementation.
 
     try.
         data(last_span) = cast span_ref( me->span_stack->last( ) ).
+        check last_span is bound.
         result = last_span->*.
       catch cx_sy_move_cast_error.
     endtry.

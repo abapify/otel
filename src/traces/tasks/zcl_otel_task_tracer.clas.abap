@@ -7,30 +7,37 @@ class zcl_otel_task_tracer definition
 
     interfaces zif_otel_task_tracer.
     aliases execute_task for zif_otel_task_tracer~execute_task.
-    methods constructor importing span_name type string raising cx_static_check.
+    methods constructor
+      importing
+                span_name     type string
+                value(tracer) type ref to zif_otel_tracer optional
+      raising   cx_static_check
+      .
 
   protected section.
   private section.
     data span_name type string.
     methods current_context returning value(result) type ref to zif_otel_span_context.
     data tracer type ref to zif_otel_tracer.
+    data context type ref to zif_otel_has_context.
 
 endclass.
 
 class zcl_otel_task_tracer implementation.
 
   method current_context.
-    try.
-        data(context) = cast zif_otel_has_context( me->tracer ).
-        result = cast #( context->context( ) ).
-      catch cx_sy_move_cast_error.
-    endtry.
+    result = cast #( context->context( ) ).
   endmethod.
-
 
   method constructor.
     me->span_name = span_name.
-    me->tracer = zcl_otel_api=>traces( )->get_tracer( ).
+
+    if tracer is not bound.
+      tracer = zcl_otel_api=>traces( )->get_tracer( ).
+    endif.
+
+    me->tracer = tracer.
+    me->context = cast #( tracer ).
   endmethod.
 
   method zif_otel_task_tracer~execute_task.
