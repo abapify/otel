@@ -58,14 +58,16 @@ CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
     destination = me->_destination.
   ENDMETHOD.
 
+
   method request.
     data(lo_request) = client->request( ).
     " method always POST as of now
     " do not know another cases when it should be different
     lo_request->method( method = 'POST' ).
+    " content type must be declared prior to body
+    lo_request->header( name = 'Content-Type' value = message->content_type( ) ).
     " body we can fill right now already too
     lo_request->body( message->get_binary( ) ).
-    lo_request->header( name = 'Content-Type' value = message->content_type( ) ).
     request = lo_request.
   endmethod.
 
