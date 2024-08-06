@@ -5,6 +5,7 @@ inheriting from zcl_otel_trace_processor
   create public .
 
   public section.
+    interfaces zif_otel_exporter.
     methods constructor
       importing
         exporter   type ref to zif_otel_msg_bus
@@ -12,7 +13,7 @@ inheriting from zcl_otel_trace_processor
     .
     "interfaces
     methods zif_otel_trace_processor~on_span_end redefinition.
-    methods flush.
+    aliases flush for zif_otel_exporter~export.
   protected section.
   private section.
 
@@ -102,4 +103,5 @@ CLASS ZCL_ABAP2OTEL_SPAN_PROCESSOR IMPLEMENTATION.
       flush(  ).
     endif.
   endmethod.
+
 ENDCLASS.
