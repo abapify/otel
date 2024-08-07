@@ -16,11 +16,9 @@ public section.
       !NAME type CSEQUENCE
       value(START_TIME) type TIMESTAMPL optional
       !CONTEXT type ref to ZIF_OTEL_CONTEXT optional .
-
-  methods get_serializable
-    returning value(result) type ref to zif_otel_span_serializable.
-
-  methods GET_DATA .
+  methods GET_SERIALIZABLE
+    returning
+      value(RESULT) type ref to ZIF_OTEL_SPAN_SERIALIZABLE .
   protected section.
   private section.
 
@@ -82,8 +80,36 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
   endmethod.
 
 
-  method GET_DATA.
-  endmethod.
+  METHOD get_serializable.
+
+    data(serializable) = new lcl_serializable_span(  ).
+    data(span) = cast zif_otel_span( me ).
+
+    serializable->zif_otel_span_serializable~span_data = value #(
+      name           = span->name
+      span_id        = to_lower( conv string( span->span_id ) )
+      trace_id       = to_lower( conv string( span->trace_id ) )
+      parent_span_id = to_lower( conv string( span->parent_span_id ) )
+      start_time     = span->start_time
+      end_time       = span->end_time
+      "attrs          = span->attributes
+      events         = value #( for event in span->events
+                        ( name      = event->name
+*         attrs = event->attributes
+                          timestamp = event->timestamp
+                        )
+                        )
+*      status         = span->status
+      links          = value #( for link in span->links
+                        ( span_id   = link->context->span_id
+                          trace_id  = link->context->trace_id
+                       )
+                       )
+    ).
+
+    result = serializable.
+
+  ENDMETHOD.
 
 
   method zif_otel_span~end.
@@ -130,35 +156,4 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
     raise event span_event exporting event = event.
 
   endmethod.
-  METHOD get_serializable.
-
-    data(serializable) = new lcl_serializable_span(  ).
-    data(span) = cast zif_otel_span( me ).
-
-    serializable->zif_otel_span_serializable~span_data = value #(
-      name           = span->name
-      span_id        = to_lower( conv string( span->span_id ) )
-      trace_id       = to_lower( conv string( span->trace_id ) )
-      parent_span_id = to_lower( conv string( span->parent_span_id ) )
-      start_time     = span->start_time
-      end_time       = span->end_time
-      "attrs          = span->attributes
-      events         = value #( for event in span->events
-                        ( name      = event->name
-*         attrs = event->attributes
-                          timestamp = event->timestamp
-                        )
-                        )
-*      status         = span->status
-      links          = value #( for link in span->links
-                        ( span_id   = link->context->span_id
-                          trace_id  = link->context->trace_id
-                       )
-                       )
-    ).
-
-    result = serializable.
-
-  ENDMETHOD.
-
 ENDCLASS.
