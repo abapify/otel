@@ -1,30 +1,26 @@
-class ZCL_ABAP2OTEL_EXPORTER_HTTP definition
+class zcl_abap2otel_exporter_http definition
   public
-  inheriting from ZCL_ABAP2OTEL_SPAN_PROCESSOR
+  inheriting from zcl_abap2otel_span_processor
   create public .
 
-public section.
+  public section.
 
-  types HEADERS_TYPE type ZIF_FETCH_ENTITY=>HEADER_TT .
+    types headers_type type zif_fetch_entity=>header_tt .
 
-  data EXPORTER type ref to ZCL_OTEL_HTTP_EXPORTER read-only .
+    data exporter type ref to zcl_otel_http_exporter read-only .
 
-  methods CONSTRUCTOR
-    importing
-      !DESTINATION type ref to ZIF_FETCH_DESTINATION
-      !BATCH_SIZE type I optional .
+    methods constructor
+      importing
+        !destination type ref to zif_fetch_destination
+        !batch_size  type i optional .
   protected section.
   private section.
-ENDCLASS.
+endclass.
 
-
-
-CLASS ZCL_ABAP2OTEL_EXPORTER_HTTP IMPLEMENTATION.
-
-
+class zcl_abap2otel_exporter_http implementation.
   method constructor.
     data(exporter) = new zcl_otel_http_exporter( destination ).
-    super->constructor( exporter = exporter batch_size = batch_size ).
+    super->constructor( message_bus = exporter batch_size = batch_size ).
     me->exporter = exporter.
   endmethod.
-ENDCLASS.
+endclass.
