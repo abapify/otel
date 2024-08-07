@@ -1,10 +1,16 @@
-class zcl_otel_msg_json definition
+class ZCL_OTEL_MSG_JSON definition
   public
   abstract
   create public .
 
-  public section.
-    interfaces zif_otel_msg.
+public section.
+
+  interfaces IF_SERIALIZABLE_OBJECT .
+  interfaces ZIF_OTEL_MSG .
+
+  methods SERIALIZE
+    returning
+      value(RESULT) type XSTRING .
 protected section.
 
   methods GET_SOURCE
@@ -14,7 +20,7 @@ protected section.
   abstract
     returning
       value(RESULT) type ref to DATA .
-  private section.
+private section.
 ENDCLASS.
 
 
@@ -26,6 +32,15 @@ CLASS ZCL_OTEL_MSG_JSON IMPLEMENTATION.
     result = value #(
       ( name = 'DATA' value = get_data( ) )
     ).
+  endmethod.
+
+
+  method SERIALIZE.
+
+    call transformation id
+      source data = me
+      result xml result.
+
   endmethod.
 
 
