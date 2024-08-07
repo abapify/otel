@@ -55,3 +55,8 @@ class lcl_span_link definition friends zcl_otel_span.
   private section.
     aliases context for zif_otel_span_link~context.
 endclass.
+
+class lcl_serializable_span definition create private friends zcl_otel_span.
+public section.
+interfaces zif_otel_span_serializable.
+endclass.

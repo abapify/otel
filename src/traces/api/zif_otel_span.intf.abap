@@ -2,7 +2,6 @@ interface zif_otel_span
   public .
 
   interfaces zif_otel_span_context.
-  interfaces if_serializable_object.
 
   " Span Id
   aliases span_id for zif_otel_span_context~span_id.

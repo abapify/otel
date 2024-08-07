@@ -1,80 +1,55 @@
-class ZCL_ABAP2OTEL_MSG definition
+class zcl_abap2otel_msg definition
   public
-  inheriting from ZCL_OTEL_MSG_JSON
+  inheriting from zcl_otel_msg_json
   final
   create public
 
-  global friends ZCL_ABAP2OTEL_SPAN_PROCESSOR .
+  global friends zcl_abap2otel_span_processor .
 
-public section.
+  public section.
 
-  types MESSAGE_TYPE type ZIF_ABAP2OTEL=>MESSAGE_TS .
+    types message_type type zif_abap2otel=>message_ts .
 
-  methods ADD_SPAN
-    importing
-      !SPAN type ref to ZIF_OTEL_SPAN .
-  methods SIZE
-    returning
-      value(RESULT) type I .
-  methods CONSTRUCTOR .
-protected section.
+    methods add_span
+      importing
+        !span type ref to zif_otel_span .
+    methods size
+      returning
+        value(result) type i .
+    methods constructor .
+  protected section.
 
-  methods GET_DATA
-    redefinition .
-  methods GET_SOURCE
-    redefinition .
+    methods get_data
+        redefinition .
+    methods get_source
+        redefinition .
   private section.
     data message type ref to  message_type.
     data _size type i.
 
-ENDCLASS.
+endclass.
 
-
-
-CLASS ZCL_ABAP2OTEL_MSG IMPLEMENTATION.
-
+class zcl_abap2otel_msg implementation.
 
   method add_span.
 
-    types span_ts type line of message_type-spans.
+    data(span_ref) = cast zcl_otel_span( span ).
+    data(span_flat) = span_ref->get_serializable( ).
 
-    append value span_ts(
-      name           = span->name
-      span_id        = to_lower( conv string( span->span_id ) )
-      trace_id       = to_lower( conv string( span->trace_id ) )
-      parent_span_id = to_lower( conv string( span->parent_span_id ) )
-      start_time     = span->start_time
-      end_time       = span->end_time
-      "attrs          = span->attributes
-      events         = value #( for event in span->events
-                        ( name      = event->name
-*         attrs = event->attributes
-                          timestamp = event->timestamp
-                        )
-                        )
-*      status         = span->status
-      links          = value #( for link in span->links
-                        ( span_id   = link->context->span_id
-                          trace_id  = link->context->trace_id
-                       )
-                       )
-     ) to message->spans.
+    append span_flat->span_data to message->spans.
     me->_size = me->_size + 1.
   endmethod.
 
-
-  METHOD constructor.
+  method constructor.
     super->constructor( ).
     me->message = new #( ).
-  ENDMETHOD.
-
+  endmethod.
 
   method get_data.
     result = message.
   endmethod.
 
-
-  method GET_SOURCE.
+  method get_source.
 
     " otherwise we need to introduce a static format with data as root
     " currently it is not supported by our ABAP2Otel spec
@@ -87,9 +62,8 @@ CLASS ZCL_ABAP2OTEL_MSG IMPLEMENTATION.
 
   endmethod.
 
-
-  METHOD size.
+  method size.
     " very simple logic - we assume 1 record in one of those tables = 1 message
     result = me->_size.
-  ENDMETHOD.
-ENDCLASS.
+  endmethod.
+endclass.
