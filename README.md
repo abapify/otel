@@ -35,3 +35,7 @@ Following libraries have to be installed prior to this package
 - [fetch-legacy](https://github.com/abapify/fetch-legacy) or [fetch-cloud](https://github.com/abapify/fetch-cloud) to have fetch working
 
 We hope to find the solution to install dependencies automatically.
+
+## Extensions
+
+- [Telemetry via Logpoints](https://github.com/abapify/otel-logpoint) PoC solution using built-in log-points as the way to store trace data. Background job takes care of exporting via HTTP. Perfect use case for ECC where there are no daemons and MQTT
