@@ -1,7 +1,11 @@
-interface zif_otel_task_tracer
+interface ZIF_OTEL_TASK_TRACER
   public .
-  methods execute_task
-    importing task type ref to zif_otel_traceable_task
-    raising   cx_static_check
-    .
+
+
+  methods EXECUTE_TASK
+    importing
+      !TASK type ref to ZIF_OTEL_TRACEABLE_TASK
+      !DEFAULT_CONTEXT type ABAP_BOOL optional
+    raising
+      CX_STATIC_CHECK .
 endinterface.

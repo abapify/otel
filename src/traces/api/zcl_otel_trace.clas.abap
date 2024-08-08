@@ -1,33 +1,36 @@
-class zcl_otel_trace definition
+class ZCL_OTEL_TRACE definition
   public
+  abstract
   final
-  abstract.
+  create public .
 
-  public section.
+public section.
 
     " default implementation
-    class-data api type ref to zif_otel_trace_api read-only.
-    class-data default_tracer type ref to zif_otel_tracer read-only.
-    class-methods: class_constructor.
+  class-data API type ref to ZIF_OTEL_TRACE_API read-only .
 
+  class-methods CLASS_CONSTRUCTOR .
     " get api instance ( advanced scenario )
-    class-methods get returning value(result) type ref to zif_otel_trace_api.
-
+  class-methods GET
+    returning
+      value(RESULT) type ref to ZIF_OTEL_TRACE_API .
   protected section.
   private section.
 
-endclass.
+ENDCLASS.
 
-class zcl_otel_trace implementation.
+
+
+CLASS ZCL_OTEL_TRACE IMPLEMENTATION.
+
 
   method class_constructor.
     " default implementation
     api = get( ).
-    default_tracer = api->get_tracer( ).
   endmethod.
+
 
   method get.
      result = new zcl_otel_trace_controller( ).
   endmethod.
-
-endclass.
+ENDCLASS.

@@ -131,6 +131,10 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
 
   method zif_otel_span~fail.
 
+    if reason is not initial.
+      me->zif_otel_span~log( name = reason ).
+    endif.
+
     me->zif_otel_span~end(
         status = me->zif_otel_span~span_status-error
     ).

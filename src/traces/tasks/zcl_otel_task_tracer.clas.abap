@@ -19,11 +19,6 @@ public section.
 private section.
 
   data TRACER type ref to ZIF_OTEL_TRACER .
-  data CONTEXT type ref to ZIF_OTEL_HAS_CONTEXT .
-
-  methods CURRENT_CONTEXT
-    returning
-      value(RESULT) type ref to ZIF_OTEL_SPAN_CONTEXT .
 ENDCLASS.
 
 
@@ -38,12 +33,6 @@ CLASS ZCL_OTEL_TASK_TRACER IMPLEMENTATION.
     endif.
 
     me->tracer = tracer.
-    me->context = cast #( tracer ).
-  endmethod.
-
-
-  method current_context.
-    result = cast #( context->context( ) ).
   endmethod.
 
 
@@ -53,14 +42,13 @@ CLASS ZCL_OTEL_TASK_TRACER IMPLEMENTATION.
 
         data(trace) = me->tracer.
         data(span_name) = task->span_name( ).
-        data(context) = current_context( ).
-        data(span) = trace->start_span( name = span_name context = context ).
+        data(span) = trace->start_span( name = span_name default_context = default_context ).
         task->execute( span = span ).
         span->end( ).
       catch cx_root into data(lo_cx).
         "handle exception
         if span is bound.
-          span->fail(  ).
+          span->fail( lo_cx->get_text( ) ).
         endif.
         raise exception lo_cx.
     endtry.

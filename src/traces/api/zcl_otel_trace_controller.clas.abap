@@ -1,61 +1,62 @@
-class zcl_otel_trace_controller definition
+class ZCL_OTEL_TRACE_CONTROLLER definition
   public
   final
-  create private global friends zcl_otel_trace.
+  create private
 
-  public section.
-    interfaces zif_otel_trace_api.
-  private section.
-    data processors type table of ref to zif_otel_trace_processor with empty key.
-    data exporters type table of ref to zif_otel_exporter with empty key.
+  global friends ZCL_OTEL_TRACE .
 
-    methods:
-      on_span_start for event span_start of zcl_otel_tracer
-        importing span,
-      on_span_end for event span_end of zcl_otel_tracer
-        importing span,
-      on_span_event for event span_event of zcl_otel_tracer
-        importing span_event.
+public section.
 
-endclass.
+  interfaces ZIF_OTEL_EXPORTER .
+  interfaces ZIF_OTEL_TRACE_API .
+protected section.
+private section.
+
+  data:
+    processors type table of ref to zif_otel_trace_processor with empty key .
+  data:
+    exporters type table of ref to zif_otel_exporter with empty key .
+  data DEFAULT_TRACER type ref to ZIF_OTEL_TRACER .
+
+  methods ON_SPAN_START
+    for event SPAN_START of ZCL_OTEL_TRACER
+    importing
+      !SPAN .
+  methods ON_SPAN_END
+    for event SPAN_END of ZCL_OTEL_TRACER
+    importing
+      !SPAN .
+  methods ON_SPAN_EVENT
+    for event SPAN_EVENT of ZCL_OTEL_TRACER
+    importing
+      !SPAN_EVENT .
+ENDCLASS.
 
 
 
-class zcl_otel_trace_controller implementation.
+CLASS ZCL_OTEL_TRACE_CONTROLLER IMPLEMENTATION.
 
-  method zif_otel_trace_api~use.
-    append processor to processors.
-    try.
-        data(exporter) = cast zif_otel_exporter( processor ).
-        append exporter to exporters.
-      catch cx_sy_move_cast_error.
-    endtry.
-  endmethod.
 
-  method on_span_start.
-    loop at processors into data(processor).
-      processor->on_span_start( span = span ).
-    endloop.
-  endmethod.
-  method on_span_event.
-    loop at processors into data(processor).
-      processor->on_span_event( event = span_event ).
-    endloop.
-  endmethod.
   method on_span_end.
     loop at processors into data(processor).
       processor->on_span_end( span = span ).
     endloop.
   endmethod.
 
-  method zif_otel_trace_api~get_tracer.
-    data(tracer) = new zcl_otel_tracer( ).
-    set handler
-        on_span_start
-        on_span_event
-        on_span_end for tracer.
-    result = tracer.
+
+  method on_span_event.
+    loop at processors into data(processor).
+      processor->on_span_event( event = span_event ).
+    endloop.
   endmethod.
+
+
+  method on_span_start.
+    loop at processors into data(processor).
+      processor->on_span_start( span = span ).
+    endloop.
+  endmethod.
+
 
   method zif_otel_exporter~export.
     loop at exporters into data(exporter).
@@ -68,4 +69,33 @@ class zcl_otel_trace_controller implementation.
     endloop.
   endmethod.
 
-endclass.
+
+  method zif_otel_trace_api~get_tracer.
+
+    if new eq abap_false and me->default_tracer is bound.
+      result = me->default_tracer.
+      return.
+    endif.
+
+    data(tracer) = new zcl_otel_tracer( ).
+    set handler
+        on_span_start
+        on_span_event
+        on_span_end for tracer.
+    result = tracer.
+
+    if me->default_tracer is not bound.
+      me->default_tracer = tracer.
+    endif.
+  endmethod.
+
+
+  method zif_otel_trace_api~use.
+    append processor to processors.
+    try.
+        data(exporter) = cast zif_otel_exporter( processor ).
+        append exporter to exporters.
+      catch cx_sy_move_cast_error.
+    endtry.
+  endmethod.
+ENDCLASS.

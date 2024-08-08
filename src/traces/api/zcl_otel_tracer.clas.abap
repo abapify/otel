@@ -76,6 +76,10 @@ CLASS ZCL_OTEL_TRACER IMPLEMENTATION.
 
   method zif_otel_tracer~start_span.
 
+    if context is not bound and default_context eq abap_true.
+      context = me->zif_otel_has_context~context( ).
+    endif.
+
     data(span) = new zcl_otel_span(
       name    = name
 *     start_time = start_time

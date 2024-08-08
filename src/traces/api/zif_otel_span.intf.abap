@@ -1,43 +1,46 @@
-interface zif_otel_span
+interface ZIF_OTEL_SPAN
   public .
 
-  interfaces zif_otel_span_context.
+
+  interfaces ZIF_OTEL_SPAN_CONTEXT .
 
   " Span Id
-  aliases span_id for zif_otel_span_context~span_id.
+  aliases SPAN_ID
+    for ZIF_OTEL_SPAN_CONTEXT~SPAN_ID .
   " Trace id
-  aliases trace_id for zif_otel_span_context~trace_id.
+  aliases TRACE_ID
+    for ZIF_OTEL_SPAN_CONTEXT~TRACE_ID .
 
-  types: span_status_type type string.
+  types SPAN_STATUS_TYPE type STRING .
 
   constants:
     begin of span_status,
       unset type span_status_type value 'UNSET',
       error type span_status_type value 'ERROR',
       ok    type span_status_type value 'OK',
-    end of span_status.
+    end of span_status .
+  data STATUS type SPAN_STATUS_TYPE read-only .
+  data NAME type STRING read-only .
+  data START_TIME type TIMESTAMPL read-only .
+  data END_TIME type TIMESTAMPL read-only .
+  data PARENT_SPAN_ID like SPAN_ID read-only .
+  data:
+    events type table of ref to zif_otel_span_event with empty key read-only .
+  data:
+    links type table of ref to zif_otel_span_link with empty key read-only .
 
-  data status type span_status_type read-only.
-  data name type string read-only .
-  data start_time type timestampl read-only .
-  data end_time type timestampl read-only .
-  data parent_span_id like span_id read-only .
-
-  data events type table of ref to zif_otel_span_event with empty key read-only.
-  data links type table of ref to zif_otel_span_link with empty key read-only.
-
-  methods end
+  methods END
     importing
-      value(end_time) type timestampl optional
-      value(status) type span_status_type optional.
-
+      value(END_TIME) type TIMESTAMPL optional
+      value(STATUS) type SPAN_STATUS_TYPE optional .
   " shortcut for end with error
-  methods fail.
-
-  methods log
-    importing name type string.
-
-  methods link
-    importing context type ref to zif_otel_span_context.
-
+  methods FAIL
+    importing
+      !REASON type STRING optional .
+  methods LOG
+    importing
+      !NAME type STRING .
+  methods LINK
+    importing
+      !CONTEXT type ref to ZIF_OTEL_SPAN_CONTEXT .
 endinterface.
