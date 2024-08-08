@@ -6,7 +6,7 @@ ABAP Telemetry minimalistic implementation
 
 ```abap
 " get tracer instance
-data(trace) = zcl_otel_trace=>api->get_tracer( ).
+data(trace) = zcl_otel_api=>traces( )->get_tracer( ).
 " start span
 data(span) = trace->start_span( 'Test trace' ).
 " log span event
