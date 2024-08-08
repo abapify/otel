@@ -2,6 +2,8 @@
 
 ABAP Telemetry minimalistic implementation
 
+> [WIP] - work in progress! Some components may be changed
+
 ## Usage
 
 ```abap
