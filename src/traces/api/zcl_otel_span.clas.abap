@@ -1,24 +1,24 @@
-class ZCL_OTEL_SPAN definition
+class zcl_otel_span definition
   public
   final
   create private
 
-  global friends ZCL_OTEL_TRACER .
+  global friends zcl_otel_tracer .
 
-public section.
+  public section.
 
-  interfaces ZIF_OTEL_CONTEXT .
-  interfaces ZIF_OTEL_SPAN .
-  interfaces ZIF_OTEL_SPAN_CONTEXT .
+    interfaces zif_otel_context .
+    interfaces zif_otel_span .
+    interfaces zif_otel_span_context .
 
-  methods CONSTRUCTOR
-    importing
-      !NAME type CSEQUENCE
-      value(START_TIME) type TIMESTAMPL optional
-      !CONTEXT type ref to ZIF_OTEL_CONTEXT optional .
-  methods GET_SERIALIZABLE
-    returning
-      value(RESULT) type ref to ZIF_OTEL_SPAN_SERIALIZABLE .
+    methods constructor
+      importing
+        !name             type csequence
+        value(start_time) type timestampl optional
+        !context          type ref to zif_otel_context optional .
+    methods get_serializable
+      returning
+        value(result) type ref to zif_otel_span_serializable .
   protected section.
   private section.
 
@@ -31,15 +31,16 @@ public section.
     aliases events for zif_otel_span~events.
     aliases links for zif_otel_span~links.
     aliases status for zif_otel_span~status.
+    aliases attributes for zif_otel_span~attributes.
 
     events span_end.
     events span_event exporting value(event) type ref to zif_otel_span_event.
 
-ENDCLASS.
+endclass.
 
 
 
-CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
+class zcl_otel_span implementation.
 
 
   method constructor.
@@ -76,11 +77,11 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
 
     me->name = name.
 
+    me->attributes = new zcl_otel_attribute_map( ).
 
   endmethod.
 
-
-  METHOD get_serializable.
+  method get_serializable.
 
     data(serializable) = new lcl_serializable_span(  ).
     data(span) = cast zif_otel_span( me ).
@@ -92,24 +93,26 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
       parent_span_id = to_lower( conv string( span->parent_span_id ) )
       start_time     = span->start_time
       end_time       = span->end_time
-      "attrs          = span->attributes
-      events         = value #( for event in span->events
-                        ( name      = event->name
-*         attrs = event->attributes
-                          timestamp = event->timestamp
-                        )
-                        )
+      attrs          = span->attributes->entries(  )
+      events         = value #(
+        for event in span->events
+        ( name      = event->name
+          attrs = event->attributes->entries(  )
+          timestamp = event->timestamp
+        )
+        )
 *      status         = span->status
-      links          = value #( for link in span->links
-                        ( span_id   = link->context->span_id
-                          trace_id  = link->context->trace_id
-                       )
-                       )
+      links          = value #(
+        for link in span->links
+        ( span_id   = link->context->span_id
+          trace_id  = link->context->trace_id
+       )
+       )
     ).
 
     result = serializable.
 
-  ENDMETHOD.
+  endmethod.
 
 
   method zif_otel_span~end.
@@ -160,4 +163,4 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
     raise event span_event exporting event = event.
 
   endmethod.
-ENDCLASS.
+endclass.

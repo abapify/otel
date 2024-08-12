@@ -44,10 +44,19 @@ endclass.
 class lcl_span_event definition friends zcl_otel_span.
   public section.
     interfaces zif_otel_span_event.
+    methods constructor.
   private section.
     aliases name for zif_otel_span_event~name.
     aliases span for zif_otel_span_event~span.
 endclass.
+
+CLASS lcl_span_event IMPLEMENTATION.
+
+  METHOD constructor.
+    me->zif_otel_has_attributes~attributes = new zcl_otel_attribute_map( ).
+  ENDMETHOD.
+
+ENDCLASS.
 
 class lcl_span_link definition friends zcl_otel_span.
   public section.

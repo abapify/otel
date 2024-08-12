@@ -3,6 +3,8 @@ interface ZIF_OTEL_SPAN
 
 
   interfaces ZIF_OTEL_SPAN_CONTEXT .
+  interfaces zif_otel_has_attributes.
+  aliases attributes for zif_otel_has_attributes~attributes.
 
   " Span Id
   aliases SPAN_ID
