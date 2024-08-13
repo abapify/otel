@@ -38,6 +38,19 @@ Following libraries have to be installed prior to this package
 
 We hope to find the solution to install dependencies automatically.
 
+## Built-in plugins
+
+### Stack info 
+With the code like this:
+```
+zcl_otel_trace=>api->use(
+  new ZCL_OTEL_TRACE_PROCESSOR_STACK( )
+ ).
+```
+we can have stack info in our span attributes which may later be useful for analysis or search:
+![image](https://github.com/user-attachments/assets/05fdac43-10cd-4976-9356-0113668976fc)
+![image](https://github.com/user-attachments/assets/9303a30d-c1f8-4487-8ce4-d7543bce24a7)
+
 ## Extensions
 
 - [Telemetry via Logpoints](https://github.com/abapify/otel-logpoint) PoC solution using built-in log-points as the way to store trace data. Background job takes care of exporting via HTTP. Perfect use case for ECC where there are no daemons and MQTT
