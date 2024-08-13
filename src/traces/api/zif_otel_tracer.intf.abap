@@ -9,6 +9,7 @@ interface ZIF_OTEL_TRACER
       !NAME type CSEQUENCE
       value(CONTEXT) type ref to ZIF_OTEL_CONTEXT optional
       !DEFAULT_CONTEXT type ABAP_BOOL optional
+      !STACK_DEPTH type I default 1
     returning
       value(RESULT) type ref to ZIF_OTEL_SPAN .
 endinterface.

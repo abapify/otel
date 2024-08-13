@@ -16,14 +16,24 @@ class zcl_otel_tracer definition
 
     methods:
       on_span_end for event span_end of zcl_otel_span
-        importing sender,
+        importing sender stack_depth,
       on_span_event for event span_event of zcl_otel_span
-        importing event.
+        importing event stack_depth.
 
     events:
-      span_start exporting value(span) type ref to zif_otel_span,
-      span_end exporting value(span) type ref to zif_otel_span,
-      span_event exporting value(span_event) type ref to zif_otel_span_event.
+      span_start
+        exporting
+            value(span) type ref to zif_otel_span
+            value(stack_depth) type i ,
+      span_end
+        exporting
+            value(span) type ref to zif_otel_span
+            value(stack_depth) type i ,
+
+      span_event
+        exporting
+            value(span_event) type ref to zif_otel_span_event
+            value(stack_depth) type i .
 
 ENDCLASS.
 
@@ -45,14 +55,14 @@ CLASS ZCL_OTEL_TRACER IMPLEMENTATION.
 
     me->span_stack->pop(  ).
 
-    raise event span_end exporting span = sender.
+    raise event span_end exporting span = sender stack_depth = stack_depth + 1.
 
   endmethod.
 
 
   method on_span_event.
 
-    raise event span_event exporting span_event = event.
+    raise event span_event exporting span_event = event  stack_depth = stack_depth + 1.
 
   endmethod.
 
@@ -92,7 +102,7 @@ CLASS ZCL_OTEL_TRACER IMPLEMENTATION.
 
     me->span_stack->push( ref #( span )  ).
 
-    raise event span_start exporting span = span.
+    raise event span_start exporting span = span  stack_depth = stack_depth + 1.
 
   endmethod.
 ENDCLASS.

@@ -21,15 +21,15 @@ private section.
   methods ON_SPAN_START
     for event SPAN_START of ZCL_OTEL_TRACER
     importing
-      !SPAN .
+      !SPAN stack_depth.
   methods ON_SPAN_END
     for event SPAN_END of ZCL_OTEL_TRACER
     importing
-      !SPAN .
+      !SPAN stack_depth.
   methods ON_SPAN_EVENT
     for event SPAN_EVENT of ZCL_OTEL_TRACER
     importing
-      !SPAN_EVENT .
+      !SPAN_EVENT stack_depth.
 ENDCLASS.
 
 
@@ -39,21 +39,21 @@ CLASS ZCL_OTEL_TRACE_CONTROLLER IMPLEMENTATION.
 
   method on_span_end.
     loop at processors into data(processor).
-      processor->on_span_end( span = span ).
+      processor->on_span_end( span = span stack_depth = stack_depth + 1 ).
     endloop.
   endmethod.
 
 
   method on_span_event.
     loop at processors into data(processor).
-      processor->on_span_event( event = span_event ).
+      processor->on_span_event( event = span_event stack_depth = stack_depth + 1 ).
     endloop.
   endmethod.
 
 
   method on_span_start.
     loop at processors into data(processor).
-      processor->on_span_start( span = span ).
+      processor->on_span_start( span = span stack_depth = stack_depth + 1 ).
     endloop.
   endmethod.
 

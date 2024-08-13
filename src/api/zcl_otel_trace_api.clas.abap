@@ -9,6 +9,8 @@ public section.
   class-methods START_SPAN
     importing
       !NAME type STRING
+      !CONTEXT type ref to ZIF_OTEL_SPAN_CONTEXT optional
+      !STACK_DEPTH type I default 1
     returning
       value(RESULT) type ref to ZIF_OTEL_SPAN .
 protected section.
@@ -35,7 +37,11 @@ CLASS ZCL_OTEL_TRACE_API IMPLEMENTATION.
       endtry.
     endif.
 
-    result = tracer->start_span( name = name default_context = abap_true ).
+    result = tracer->start_span(
+        name = name
+        default_context = abap_true
+        context = context
+        stack_depth = stack_depth + 1 ).
 
   endmethod.
 ENDCLASS.

@@ -48,15 +48,20 @@ class lcl_span_event definition friends zcl_otel_span.
   private section.
     aliases name for zif_otel_span_event~name.
     aliases span for zif_otel_span_event~span.
+    data attributes type ref to  zcl_otel_attribute_map.
 endclass.
 
-CLASS lcl_span_event IMPLEMENTATION.
+class lcl_span_event implementation.
 
-  METHOD constructor.
-    me->zif_otel_has_attributes~attributes = new zcl_otel_attribute_map( ).
-  ENDMETHOD.
+  method constructor.
+    me->attributes = new zcl_otel_attribute_map( ).
+  endmethod.
 
-ENDCLASS.
+  method zif_otel_has_attributes~attributes.
+    result = me->attributes.
+  endmethod.
+
+endclass.
 
 class lcl_span_link definition friends zcl_otel_span.
   public section.
@@ -66,6 +71,6 @@ class lcl_span_link definition friends zcl_otel_span.
 endclass.
 
 class lcl_serializable_span definition create private friends zcl_otel_span.
-public section.
-interfaces zif_otel_span_serializable.
+  public section.
+    interfaces zif_otel_span_serializable.
 endclass.

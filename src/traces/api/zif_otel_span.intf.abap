@@ -34,14 +34,18 @@ interface ZIF_OTEL_SPAN
   methods END
     importing
       value(END_TIME) type TIMESTAMPL optional
-      value(STATUS) type SPAN_STATUS_TYPE optional .
+      value(STATUS) type SPAN_STATUS_TYPE optional
+      stack_depth type i optional .
   " shortcut for end with error
   methods FAIL
     importing
-      !REASON type STRING optional .
+      !REASON type STRING optional
+      stack_depth type i optional
+      preferred parameter reason.
   methods LOG
     importing
-      !NAME type STRING .
+      !NAME type STRING
+      stack_depth type i optional.
   methods LINK
     importing
       !CONTEXT type ref to ZIF_OTEL_SPAN_CONTEXT .

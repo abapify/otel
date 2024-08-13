@@ -7,6 +7,7 @@ class zcl_otel_span definition
 
   public section.
 
+    interfaces zif_otel_has_attributes .
     interfaces zif_otel_context .
     interfaces zif_otel_span .
     interfaces zif_otel_span_context .
@@ -31,10 +32,10 @@ class zcl_otel_span definition
     aliases events for zif_otel_span~events.
     aliases links for zif_otel_span~links.
     aliases status for zif_otel_span~status.
-    aliases attributes for zif_otel_span~attributes.
 
-    events span_end.
-    events span_event exporting value(event) type ref to zif_otel_span_event.
+    events span_end exporting value(stack_depth) type i.
+    events span_event exporting value(event) type ref to zif_otel_span_event value(stack_depth) type i.
+    data attributes type ref to zcl_otel_attribute_map.
 
 endclass.
 
@@ -81,6 +82,7 @@ class zcl_otel_span implementation.
 
   endmethod.
 
+
   method get_serializable.
 
     data(serializable) = new lcl_serializable_span(  ).
@@ -93,11 +95,11 @@ class zcl_otel_span implementation.
       parent_span_id = to_lower( conv string( span->parent_span_id ) )
       start_time     = span->start_time
       end_time       = span->end_time
-      attrs          = span->attributes->entries(  )
+      attrs          = span->attributes(  )->entries(  )
       events         = value #(
         for event in span->events
         ( name      = event->name
-          attrs = event->attributes->entries(  )
+          attrs = event->attributes(  )->entries(  )
           timestamp = event->timestamp
         )
         )
@@ -115,6 +117,11 @@ class zcl_otel_span implementation.
   endmethod.
 
 
+  method zif_otel_has_attributes~attributes.
+    result = me->attributes.
+  endmethod.
+
+
   method zif_otel_span~end.
 
     check me->end_time is initial.
@@ -127,7 +134,7 @@ class zcl_otel_span implementation.
 
     me->end_time = end_time.
 
-    raise event span_end.
+    raise event span_end exporting stack_depth = stack_depth + 1.
 
   endmethod.
 
@@ -160,7 +167,16 @@ class zcl_otel_span implementation.
 
     append event to me->events.
 
-    raise event span_event exporting event = event.
+    raise event span_event exporting event = event stack_depth = stack_depth + 1..
 
   endmethod.
+  method zif_otel_span_context~get_context.
+    result = value #(
+    trace_id = me->trace_id
+    span_id = me->span_id
+    ).
+
+
+  endmethod.
+
 endclass.
