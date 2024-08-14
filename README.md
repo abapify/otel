@@ -5,7 +5,7 @@ ABAP Telemetry minimalistic implementation
 > [WIP] - work in progress! Some components may be changed
 
 ## Why Otel?
-This library allows us to trace abap code across multiple processes
+This library allows us to trace abap code across multiple processes ( the picture is chose randomly, I'll create some better example in a separate project one day )
 ![image](https://github.com/user-attachments/assets/96764a3d-428e-4a2d-86f7-cfd67d684b4d)
 
 So you can bring your spans into a single trace from such sources as:
