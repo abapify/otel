@@ -3,11 +3,6 @@ INTERFACE zif_otel_counter
 
   INTERFACES zif_otel_metric.
 
-  METHODS:
-    add
-      IMPORTING
-        value      TYPE f
-        attributes TYPE any OPTIONAL
-        context    TYPE REF TO zif_otel_context OPTIONAL.
+  aliases add for zif_otel_metric~add_value.
 
 ENDINTERFACE.

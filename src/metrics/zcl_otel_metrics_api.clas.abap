@@ -1,55 +1,76 @@
-CLASS zcl_otel_metrics_api DEFINITION
-  PUBLIC
-  CREATE PRIVATE.
+class zcl_otel_metrics_api definition
+  public
+  final
+  create private .
 
-  PUBLIC SECTION.
-    INTERFACES zif_otel_metrics_api.
-    
-    CLASS-METHODS:
-      get_instance
-        RETURNING
-          VALUE(instance) TYPE REF TO zif_otel_metrics_api.
+  public section  .
+    interfaces zif_otel_metrics_api.
+    interfaces zif_otel_metrics_provider.
+  protected section.
+  private section.
+    data meter_provider type ref to zif_otel_meter_provider.
+    data processors type table of ref to zif_otel_metrics_processor with empty key.
+    methods on_metric_value_added for event metric_value_added of zcl_otel_meter_provider
+      importing
+        data_point
+        meter
+        metric
+      .
+endclass.
 
-  PRIVATE SECTION.
-    CLASS-DATA go_instance TYPE REF TO zcl_otel_metrics_api.
-    DATA mo_meter_provider TYPE REF TO zif_otel_meter_provider.
 
-ENDCLASS.
 
-CLASS zcl_otel_metrics_api IMPLEMENTATION.
+class zcl_otel_metrics_api implementation.
+  method zif_otel_metrics_api~disable.
 
-  METHOD get_instance.
-    IF go_instance IS INITIAL.
-      go_instance = NEW #( ).
-    ENDIF.
-    instance = go_instance.
-  ENDMETHOD.
+    set handler on_metric_value_added for all instances activation ' '.
 
-  METHOD zif_otel_metrics_api~disable.
-    mo_meter_provider = NEW zcl_otel_meter_provider( ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_otel_metrics_api~get_meter.
-    meter = zif_otel_metrics_api~get_meter_provider( )->get_meter( 
-      name = name
-      version = version
-      schema_url = schema_url
-      attributes = attributes ).
-  ENDMETHOD.
+  method zif_otel_metrics_api~get_meter.
 
-  METHOD zif_otel_metrics_api~get_meter_provider.
-    IF mo_meter_provider IS INITIAL.
-      mo_meter_provider = NEW zcl_otel_meter_provider( ).
-    ENDIF.
-    provider = mo_meter_provider.
-  ENDMETHOD.
+    meter = me->zif_otel_metrics_api~get_meter_provider( )->get_meter( name ).
 
-  METHOD zif_otel_metrics_api~set_global_meter_provider.
-    mo_meter_provider = provider.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD zif_otel_metrics_api~get_instance.
-    instance = get_instance( ).
-  ENDMETHOD.
+  method zif_otel_metrics_api~get_meter_provider.
 
-ENDCLASS.
+    if me->meter_provider is not bound.
+      data(meter_provider) = new zcl_otel_meter_provider( ).
+      set handler on_metric_value_added for meter_provider.
+      me->zif_otel_metrics_api~set_global_meter_provider( provider = meter_provider ).
+    endif.
+
+    provider = me->meter_provider.
+
+  endmethod.
+
+  method zif_otel_metrics_api~set_global_meter_provider.
+
+    me->meter_provider = provider.
+
+  endmethod.
+
+  method on_metric_value_added.
+
+    loop at me->processors into data(lo_processor).
+      check lo_processor is bound.
+      lo_processor->on_metric_value_added(
+        meter      = meter
+        metric     = metric
+        data_point = data_point
+      ).
+
+    endloop.
+
+
+  endmethod.
+
+  method zif_otel_metrics_provider~use.
+
+    check processor is bound.
+    append processor to me->processors.
+
+  endmethod.
+
+endclass.

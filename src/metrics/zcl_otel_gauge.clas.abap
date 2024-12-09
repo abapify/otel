@@ -1,20 +1,17 @@
-CLASS zcl_otel_gauge DEFINITION
-  PUBLIC
-  INHERITING FROM zcl_otel_metric
-  CREATE PUBLIC.
+class zcl_otel_gauge definition
+  public
+  final
+  create public inheriting from zcl_otel_metric .
 
-  PUBLIC SECTION.
-    INTERFACES zif_otel_gauge.
 
-  PRIVATE SECTION.
-    DATA mv_value TYPE zif_otel_metric=>tv_value.
 
-ENDCLASS.
+  public section.
+  interfaces zif_otel_gauge.
+  protected section.
+  private section.
+endclass.
 
-CLASS zcl_otel_gauge IMPLEMENTATION.
 
-  METHOD zif_otel_gauge~record.
-    mv_value = value.
-  ENDMETHOD.
 
-ENDCLASS.
+class zcl_otel_gauge implementation.
+endclass.

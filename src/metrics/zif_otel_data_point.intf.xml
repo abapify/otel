@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>ZIF_OTEL_UP_DOWN_COUNTER</CLSNAME>
+    <CLSNAME>ZIF_OTEL_DATA_POINT</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>OpenTelemetry Up Down Counter</DESCRIPT>
+    <DESCRIPT>Data point</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>
     <STATE>1</STATE>
     <UNICODE>X</UNICODE>

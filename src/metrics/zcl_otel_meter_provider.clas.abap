@@ -1,32 +1,53 @@
-CLASS zcl_otel_meter_provider DEFINITION
-  PUBLIC
-  CREATE PUBLIC.
+class zcl_otel_meter_provider definition
+  public
+  final
+  create private
+  global friends zcl_otel_metrics_api.
 
-  PUBLIC SECTION.
-    INTERFACES zif_otel_meter_provider.
+  public section.
+  interfaces zif_otel_meter_provider.
+  protected section.
+  private section.
 
-  PRIVATE SECTION.
-    TYPES: BEGIN OF ts_meter_cache,
-             name   TYPE string,
-             meter  TYPE REF TO zif_otel_meter,
-           END OF ts_meter_cache.
-    
-    DATA mt_meters TYPE HASHED TABLE OF ts_meter_cache WITH UNIQUE KEY name.
 
-ENDCLASS.
 
-CLASS zcl_otel_meter_provider IMPLEMENTATION.
+    methods on_metric_value_added for event metric_value_added of zcl_otel_meter
+    importing
+    sender
+    metric
+    data_point.
 
-  METHOD zif_otel_meter_provider~get_meter.
-    READ TABLE mt_meters WITH KEY name = name INTO DATA(ls_meter).
-    IF sy-subrc = 0.
-      meter = ls_meter-meter.
-      RETURN.
-    ENDIF.
+    events metric_value_added
+      exporting
+      value(meter) type ref to zif_otel_meter
+      value(metric) type ref to zif_otel_metric
+      value(data_point) type ref to zif_otel_data_point.
 
-    meter = NEW zcl_otel_meter( ).
-    INSERT VALUE #( name = name
-                   meter = meter ) INTO TABLE mt_meters.
-  ENDMETHOD.
+endclass.
 
-ENDCLASS.
+
+
+class zcl_otel_meter_provider implementation.
+  method zif_otel_meter_provider~get_meter.
+
+
+
+    data(new_meter) = new zcl_otel_meter( name ).
+
+    set handler on_metric_value_added for new_meter.
+
+    meter = new_meter.
+
+  endmethod.
+
+  method on_metric_value_added.
+
+    raise event  metric_value_added
+     exporting
+       data_point = data_point
+       metric = metric
+       meter = sender.
+
+  endmethod.
+
+endclass.

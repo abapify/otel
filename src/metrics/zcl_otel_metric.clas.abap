@@ -1,43 +1,62 @@
-CLASS zcl_otel_metric DEFINITION
-  PUBLIC
-  ABSTRACT.
+class zcl_otel_metric definition
+  public
 
-  PUBLIC SECTION.
-    INTERFACES zif_otel_metric.
-    
-    METHODS constructor
-      IMPORTING
-        name    TYPE string
-        options TYPE zif_otel_metric=>ts_metric_options OPTIONAL.
+  create public abstract
+  global friends zcl_otel_meter.
 
-  PROTECTED SECTION.
-    DATA:
-      mv_name        TYPE string,
-      mv_unit        TYPE string,
-      mv_description TYPE string,
-      mv_value_type  TYPE zif_otel_metric=>te_value_type.
+  public section.
+    interfaces zif_otel_metric.
+    methods constructor importing
+                          name    type string
+                          options type zif_otel_metric~ts_metric_options optional.
+  protected section.
+  private section.
 
-ENDCLASS.
+    data options type zif_otel_metric~ts_metric_options.
+    data name type string.
+    events value_added exporting
+                         value(data_point) type ref to zif_otel_data_point.
 
-CLASS zcl_otel_metric IMPLEMENTATION.
+endclass.
 
-  METHOD constructor.
-    mv_name = name.
-    IF options IS NOT INITIAL.
-      mv_unit = options-unit.
-      mv_description = options-description.
-      mv_value_type = options-value_type.
-    ENDIF.
-  ENDMETHOD.
 
-  METHOD zif_otel_metric~set_description.
-    mv_description = description.
-    self = me.
-  ENDMETHOD.
 
-  METHOD zif_otel_metric~set_unit.
-    mv_unit = unit.
-    self = me.
-  ENDMETHOD.
+class zcl_otel_metric implementation.
+  method zif_otel_metric~add_value.
 
-ENDCLASS.
+
+    data(data_point) = new zcl_otel_data_point(
+      value = value
+      context = context
+      attributes = attributes ).
+
+    raise event value_added exporting data_point = data_point.
+
+  endmethod.
+
+  method zif_otel_metric~set_description.
+
+    me->options-description = description.
+
+  endmethod.
+
+  method zif_otel_metric~set_unit.
+
+    me->options-unit = unit.
+
+  endmethod.
+
+  method zif_otel_metric~set_double.
+
+    me->options-value_type = zif_otel_metric=>double.
+
+  endmethod.
+
+  method constructor.
+
+    me->name = name.
+    me->options = options.
+
+  endmethod.
+
+endclass.

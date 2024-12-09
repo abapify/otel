@@ -14,6 +14,11 @@ INTERFACE zif_otel_metric
       value_type  type te_value_type,
     END OF ts_metric_options.
 
+  types attributes_type type zif_otel_attribute_map=>entries_tt.
+  types context_type type ref to zif_otel_context.
+  types value_type type f.
+
+
   METHODS:
     set_unit
       IMPORTING
@@ -27,13 +32,15 @@ INTERFACE zif_otel_metric
       RETURNING
         VALUE(self) TYPE REF TO zif_otel_metric,
 
+    set_double
+      returning value(self) type ref to zif_otel_metric,
+
 
     add_value
         IMPORTING
-          value      TYPE f
-          attributes TYPE ref to zif_otel_attributes optional
-          context    TYPE REF TO zif_otel_context OPTIONAL
-          returning value(result) type ref to zif_otel_data_point.
+          value      TYPE value_type
+          attributes TYPE attributes_type optional
+          context    TYPE context_type OPTIONAL.
 
 
 ENDINTERFACE.
