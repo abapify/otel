@@ -33,6 +33,6 @@ CLASS ZCL_OTEL_API_BADI_FALLBACK IMPLEMENTATION.
 
 
   method zif_otel_api~traces.
-    result = zcl_otel_trace=>api.
+    throw( 'Trace API is not implemented. Please create ZOTEL_API_BADI implementation.' ).
   endmethod.
 ENDCLASS.

@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>ZIF_OTEL_METRICS_API</CLSNAME>
+    <CLSNAME>ZIF_OTEL_METER</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>OpenTelemetry Metrics API</DESCRIPT>
+    <DESCRIPT>OpenTelemetry Meter</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>
     <STATE>1</STATE>
     <UNICODE>X</UNICODE>
