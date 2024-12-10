@@ -12,7 +12,7 @@ class zcl_otel_metric definition
   protected section.
   private section.
 
-    data options type zif_otel_metric~ts_metric_options.
+    aliases options for zif_otel_metric~options.
     data name type string.
     events value_added exporting
                          value(data_point) type ref to zif_otel_data_point.

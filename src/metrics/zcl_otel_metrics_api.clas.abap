@@ -6,6 +6,12 @@ class zcl_otel_metrics_api definition
   public section  .
     interfaces zif_otel_metrics_api.
     interfaces zif_otel_metrics_provider.
+
+    class-data api type ref to zif_otel_metrics_api read-only.
+    class-data app type ref to zif_otel_metrics_provider read-only.
+
+    class-methods class_constructor.
+
   protected section.
   private section.
     data meter_provider type ref to zif_otel_meter_provider.
@@ -70,6 +76,15 @@ class zcl_otel_metrics_api implementation.
 
     check processor is bound.
     append processor to me->processors.
+
+  endmethod.
+
+  method class_constructor.
+
+
+    data(this) =  new zcl_otel_metrics_api(  ).
+    api = this.
+    app = this.
 
   endmethod.
 

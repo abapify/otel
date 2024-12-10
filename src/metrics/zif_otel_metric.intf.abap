@@ -19,6 +19,9 @@ INTERFACE zif_otel_metric
   types value_type type f.
 
 
+  data name type string read-only.
+  data options type ts_metric_options read-only.
+
   METHODS:
     set_unit
       IMPORTING

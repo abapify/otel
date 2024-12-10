@@ -8,10 +8,10 @@ class zcl_otel_meter definition
     interfaces zif_otel_meter.
 
     methods constructor
-    importing name type string.
+      importing name type string.
   protected section.
   private section.
-    DATA name TYPE string.
+    data name type string.
 
     methods register_metric importing metric type ref to zcl_otel_metric.
     methods on_metric_value_added for event value_added of zcl_otel_metric
@@ -32,33 +32,49 @@ class zcl_otel_meter implementation.
 
   method zif_otel_meter~create_counter.
 
-    counter = new zcl_otel_counter(
+    data(metric) = new zcl_otel_counter(
     name = name
     options = options ).
+
+    register_metric( metric ).
+
+    counter = metric.
 
   endmethod.
 
   method zif_otel_meter~create_gauge.
 
-    gauge = new zcl_otel_gauge(
-  name = name
-  options = options ).
+    data(metric) = new zcl_otel_gauge(
+     name = name
+     options = options ).
+
+    register_metric( metric ).
+
+    gauge = metric.
 
   endmethod.
 
   method zif_otel_meter~create_histogram.
 
-    histogram = new zcl_otel_histogram(
-  name = name
-  options = options ).
+    data(metric) = new zcl_otel_histogram(
+    name = name
+    options = options ).
+
+    register_metric( metric ).
+
+    histogram = metric.
 
   endmethod.
 
   method zif_otel_meter~create_up_down_counter.
 
-    counter = new zcl_otel_up_down_counter(
-  name = name
-  options = options ).
+    data(metric) = new zcl_otel_up_down_counter(
+    name = name
+    options = options ).
+
+    register_metric( metric ).
+
+    counter = metric.
 
   endmethod.
 
@@ -79,7 +95,7 @@ class zcl_otel_meter implementation.
 
   method constructor.
 
-  me->name = name.
+    me->name = name.
 
   endmethod.
 

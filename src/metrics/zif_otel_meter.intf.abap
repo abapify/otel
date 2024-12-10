@@ -1,6 +1,8 @@
 INTERFACE zif_otel_meter
   PUBLIC.
 
+  data name type string read-only.
+
   METHODS:
     create_counter
       IMPORTING
