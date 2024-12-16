@@ -1,8 +1,12 @@
 interface zif_otel_data_point
   public .
 
-   DATA value TYPE zif_otel_metric=>value_type read-only.
-   DATA attributes TYPE  zif_otel_metric=>attributes_type read-only.
-   DATA context TYPE zif_otel_metric=>context_type read-only.
+   types attributes_type type zif_otel_attribute_map=>entries_tt.
+   types context_type type ref to zif_otel_context.
+   types value_type type f.
+
+   DATA value TYPE value_type read-only.
+   DATA attributes TYPE attributes_type read-only.
+   DATA context TYPE context_type read-only.
 
 endinterface.

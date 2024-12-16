@@ -1,21 +1,27 @@
 class zcl_abap2otel_msg definition
   public
   inheriting from zcl_otel_msg_json
-  create public
+  create public.
 
-  global friends zcl_abap2otel_span_processor .
 
   public section.
 
-    interfaces zif_otel_span_collector.
+    interfaces zif_otel_msg_buffer.
+
 
     types message_type type zif_abap2otel=>message_ts .
 
-    aliases add_span for zif_otel_span_collector~add_span.
-    methods size
-      returning
-        value(result) type i .
     methods constructor .
+
+    types:
+      span_ts   type line of message_type-spans,
+      log_ts    type line of message_type-logs,
+      metric_ts type line of message_type-metrics.
+
+    methods add_span   importing span type span_ts.
+    methods add_log    importing log type log_ts.
+    methods add_metric importing metric type metric_ts.
+
   protected section.
 
     methods get_data
@@ -24,21 +30,14 @@ class zcl_abap2otel_msg definition
         redefinition .
   private section.
     data message type ref to  message_type.
-    data _size type i.
-
-ENDCLASS.
+    aliases updated for zif_otel_msg_buffer~updated.
 
 
+endclass.
 
-CLASS ZCL_ABAP2OTEL_MSG IMPLEMENTATION.
 
 
-  method add_span.
-    check span is bound.
-    append span->span_data to message->spans.
-    me->_size = me->_size + 1.
-  endmethod.
-
+class zcl_abap2otel_msg implementation.
 
   method constructor.
     super->constructor( ).
@@ -64,9 +63,38 @@ CLASS ZCL_ABAP2OTEL_MSG IMPLEMENTATION.
 
   endmethod.
 
+  method add_log.
 
-  method size.
-    " very simple logic - we assume 1 record in one of those tables = 1 message
-    result = me->_size.
+    append log to me->message->logs.
+    raise event updated.
+
   endmethod.
-ENDCLASS.
+
+  method add_metric.
+
+    append metric to me->message->metrics.
+    raise event updated.
+
+  endmethod.
+
+  method add_span.
+
+    append span to me->message->spans.
+    raise event updated.
+
+  endmethod.
+
+  method zif_otel_msg_buffer~clear.
+
+    clear me->message->*.
+
+  endmethod.
+
+  method zif_otel_msg_buffer~size.
+
+    " very simple logic - we assume 1 record in one of those tables = 1 message
+    result = lines( me->message->spans ) + lines(  me->message->logs ) + lines(  me->message->metrics ).
+
+  endmethod.
+
+endclass.

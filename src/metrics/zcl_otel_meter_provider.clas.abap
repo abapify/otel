@@ -41,6 +41,8 @@ class zcl_otel_meter_provider implementation.
     try.
         meter = me->meters[  name = name ]-meter.
 
+      catch cx_sy_itab_line_not_found.
+
         data(new_meter) = new zcl_otel_meter( name ).
 
         set handler on_metric_value_added for new_meter.
@@ -48,8 +50,6 @@ class zcl_otel_meter_provider implementation.
         insert value #( name = name meter = meter ) into table me->meters.
 
         meter = new_meter.
-
-      catch cx_sy_itab_line_not_found.
     endtry.
 
   endmethod.

@@ -1,49 +1,46 @@
-INTERFACE zif_otel_metric
-  PUBLIC.
+interface ZIF_OTEL_METRIC
+  public .
 
-  TYPES:
+
+  types:
     BEGIN OF ENUM te_value_type,
       int,
       double,
-    END OF ENUM te_value_type.
-
-  TYPES:
+    END OF ENUM te_value_type .
+  types:
     BEGIN OF ts_metric_options,
       unit        TYPE string,
       description TYPE string,
       value_type  type te_value_type,
-    END OF ts_metric_options.
+    END OF ts_metric_options .
+  types ATTRIBUTES_TYPE type ZIF_OTEL_ATTRIBUTE_MAP=>ENTRIES_TT .
+  types CONTEXT_TYPE type ref to ZIF_OTEL_CONTEXT .
+  types VALUE_TYPE type F .
 
-  types attributes_type type zif_otel_attribute_map=>entries_tt.
-  types context_type type ref to zif_otel_context.
-  types value_type type f.
+  data NAME type STRING read-only .
+  data OPTIONS type TS_METRIC_OPTIONS read-only .
 
+  types metric_type type string.
+  data TYPE type metric_type .
 
-  data name type string read-only.
-  data options type ts_metric_options read-only.
-
-  METHODS:
-    set_unit
-      IMPORTING
-        unit TYPE string
-      RETURNING
-        VALUE(self) TYPE REF TO zif_otel_metric,
-
-    set_description
-      IMPORTING
-        description TYPE string
-      RETURNING
-        VALUE(self) TYPE REF TO zif_otel_metric,
-
-    set_double
-      returning value(self) type ref to zif_otel_metric,
-
-
-    add_value
-        IMPORTING
-          value      TYPE value_type
-          attributes TYPE attributes_type optional
-          context    TYPE context_type OPTIONAL.
-
-
-ENDINTERFACE.
+  methods SET_UNIT
+    importing
+      !UNIT type STRING
+    returning
+      value(SELF) type ref to ZIF_OTEL_METRIC .
+  methods SET_DESCRIPTION
+    importing
+      !DESCRIPTION type STRING
+    returning
+      value(SELF) type ref to ZIF_OTEL_METRIC .
+  methods SET_DOUBLE
+    returning
+      value(SELF) type ref to ZIF_OTEL_METRIC .
+  methods ADD_VALUE
+    importing
+      !VALUE type VALUE_TYPE
+      !ATTRIBUTES type ATTRIBUTES_TYPE optional
+      !CONTEXT type CONTEXT_TYPE optional
+    returning
+      value(RESULT) type ref to ZIF_OTEL_DATA_POINT .
+endinterface.

@@ -4,6 +4,7 @@ class zcl_otel_data_point definition
 
   public section.
   interfaces zif_otel_data_point.
+  interfaces zif_otel_has_uuid.
 
   methods constructor
     importing
@@ -25,6 +26,13 @@ class zcl_otel_data_point implementation.
     me->zif_otel_data_point~value = value.
     me->zif_otel_data_point~context = context.
     me->zif_otel_data_point~attributes = attributes.
+
+    " it's needed for uniqueness of datapoint ( used in export )
+    try.
+        me->zif_otel_has_uuid~uuid = cl_system_uuid=>create_uuid_c22_static( ).
+      catch cx_uuid_error.
+        "handle exception
+    endtry.
 
   endmethod.
 

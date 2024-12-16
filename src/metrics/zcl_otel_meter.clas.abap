@@ -11,7 +11,7 @@ class zcl_otel_meter definition
       importing name type string.
   protected section.
   private section.
-    data name type string.
+    aliases name for zif_otel_meter~name.
 
     methods register_metric importing metric type ref to zcl_otel_metric.
     methods on_metric_value_added for event value_added of zcl_otel_metric
