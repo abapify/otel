@@ -1,12 +1,20 @@
 interface zif_otel_data_point
   public .
 
-   types attributes_type type zif_otel_attribute_map=>entries_tt.
-   types context_type type ref to zif_otel_context.
+   interfaces zif_otel_has_attributes.
+
    types value_type type f.
 
    DATA value TYPE value_type read-only.
-   DATA attributes TYPE attributes_type read-only.
-   DATA context TYPE context_type read-only.
+
+   aliases attributes for zif_otel_has_attributes~attributes.
+   "DATA context TYPE context_type read-only.
+
+*
+*   types keys_tt type table of string with empty key.
+*
+*   methods inherit_from_context
+*     importing
+*        attributes type keys_tt.
 
 endinterface.

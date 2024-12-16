@@ -1,46 +1,48 @@
-interface ZIF_OTEL_METRIC
+interface zif_otel_metric
   public .
 
 
   types:
-    BEGIN OF ENUM te_value_type,
+    begin of enum te_value_type,
       int,
       double,
-    END OF ENUM te_value_type .
+    end of enum te_value_type .
   types:
-    BEGIN OF ts_metric_options,
-      unit        TYPE string,
-      description TYPE string,
+    begin of ts_metric_options,
+      unit        type string,
+      description type string,
       value_type  type te_value_type,
-    END OF ts_metric_options .
-  types ATTRIBUTES_TYPE type ZIF_OTEL_ATTRIBUTE_MAP=>ENTRIES_TT .
-  types CONTEXT_TYPE type ref to ZIF_OTEL_CONTEXT .
-  types VALUE_TYPE type F .
+    end of ts_metric_options .
+  types attributes_type type zif_otel_attribute_map=>entries_tt .
+  types context_type type ref to zif_otel_context .
+  types value_type type f .
 
-  data NAME type STRING read-only .
-  data OPTIONS type TS_METRIC_OPTIONS read-only .
+  data name type string read-only .
+  data options type ts_metric_options read-only .
 
   types metric_type type string.
-  data TYPE type metric_type .
+  data type type metric_type .
 
-  methods SET_UNIT
+  methods set_unit
     importing
-      !UNIT type STRING
+      !unit       type string
     returning
-      value(SELF) type ref to ZIF_OTEL_METRIC .
-  methods SET_DESCRIPTION
+      value(self) type ref to zif_otel_metric .
+  methods set_description
     importing
-      !DESCRIPTION type STRING
+      !description type string
     returning
-      value(SELF) type ref to ZIF_OTEL_METRIC .
-  methods SET_DOUBLE
+      value(self)  type ref to zif_otel_metric .
+  methods set_double
     returning
-      value(SELF) type ref to ZIF_OTEL_METRIC .
-  methods ADD_VALUE
+      value(self) type ref to zif_otel_metric .
+  methods add_value
     importing
-      !VALUE type VALUE_TYPE
-      !ATTRIBUTES type ATTRIBUTES_TYPE optional
-      !CONTEXT type CONTEXT_TYPE optional
-    returning
-      value(RESULT) type ref to ZIF_OTEL_DATA_POINT .
+      !value      type value_type
+      !attributes type attributes_type optional
+      " it's not yet clear how we should use context in metrics
+      "CONTEXT type CONTEXT_TYPE optional1
+*    returning
+*      value(RESULT) type ref to ZIF_OTEL_DATA_POINT
+    .
 endinterface.
