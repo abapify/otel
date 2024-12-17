@@ -6,6 +6,7 @@ interface zif_otel_data_point
    types value_type type f.
 
    DATA value TYPE value_type read-only.
+   data timestamp type timestampl read-only.
 
    aliases attributes for zif_otel_has_attributes~attributes.
    "DATA context TYPE context_type read-only.

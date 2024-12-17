@@ -19,6 +19,7 @@ class zcl_otel_data_point definition
   private section.
     DATA _attributes TYPE REF TO zcl_otel_attribute_map.
     DATA context type ref to zif_otel_context.
+    aliases timestamp for zif_otel_data_point~timestamp.
 
 endclass.
 
@@ -39,6 +40,8 @@ class zcl_otel_data_point implementation.
       catch cx_uuid_error.
         "handle exception
     endtry.
+
+    get time stamp field me->timestamp.
 
   endmethod.
 

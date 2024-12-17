@@ -14,6 +14,7 @@ interface zif_abap2otel
     begin of metric_data_point_ts,
       attrs type attributes_tt,
       value type decfloat34,
+      ts type xsddatetime_long_z,
     end of metric_data_point_ts,
     begin of metric_ts,
       name        type string,
