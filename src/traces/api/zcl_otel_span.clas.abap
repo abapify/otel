@@ -11,7 +11,6 @@ public section.
   interfaces ZIF_OTEL_CONTEXT .
   interfaces ZIF_OTEL_SPAN .
   interfaces ZIF_OTEL_SPAN_CONTEXT .
-  interfaces ZIF_OTEL_SERIALIZABLE .
 
   methods CONSTRUCTOR
     importing
@@ -50,9 +49,6 @@ private section.
       value(EVENT) type ref to ZIF_OTEL_SPAN_EVENT
       value(STACK_DEPTH) type I .
 
-  methods GET_SERIALIZABLE
-    returning
-      value(RESULT) type ref to ZIF_OTEL_SPAN_SERIALIZABLE .
 ENDCLASS.
 
 
@@ -98,57 +94,9 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
 
   endmethod.
 
-
-  method get_serializable.
-
-    data(serializable) = new lcl_serializable_span(  ).
-    data(span) = cast zif_otel_span( me ).
-
-    serializable->zif_otel_span_serializable~span_data = value #(
-      name           = span->name
-      span_id        = to_lower( conv string( span->span_id ) )
-      trace_id       = to_lower( conv string( span->trace_id ) )
-      parent_span_id = to_lower( conv string( span->parent_span_id ) )
-      start_time     = span->start_time
-      end_time       = span->end_time
-      attrs          = span->attributes(  )->entries(  )
-      events         = value #(
-        for event in span->events
-        ( name      = event->name
-          attrs = event->attributes(  )->entries(  )
-          timestamp = event->timestamp
-        )
-        )
-*      status         = span->status
-      links          = value #(
-        for link in span->links
-        ( span_id   = link->context->span_id
-          trace_id  = link->context->trace_id
-       )
-       )
-    ).
-
-    result = serializable.
-
-  endmethod.
-
-
   method zif_otel_has_attributes~attributes.
     result = me->attributes.
   endmethod.
-
-
-  method ZIF_OTEL_SERIALIZABLE~SERIALIZE.
-
-    data(span_flat) = me->get_serializable( ).
-
-    call transformation id
-      source span = span_flat
-      result xml result
-      options initial_components = 'suppress'.
-
-  endmethod.
-
 
   method zif_otel_span_context~get_context.
     result = value #(
@@ -208,4 +156,20 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
     raise event span_event exporting event = event stack_depth = stack_depth + 1..
 
   endmethod.
+  METHOD ZIF_OTEL_CONTEXT~DELETE_VALUE.
+
+  ENDMETHOD.
+
+  METHOD ZIF_OTEL_CONTEXT~GET_ENTRIES.
+
+  ENDMETHOD.
+
+  METHOD ZIF_OTEL_CONTEXT~GET_VALUE.
+
+  ENDMETHOD.
+
+  METHOD ZIF_OTEL_CONTEXT~SET_VALUE.
+
+  ENDMETHOD.
+
 ENDCLASS.

@@ -7,4 +7,5 @@ interface zif_otel_msg_buffer
   methods size returning value(result) type i.
   events updated.
 
+
 endinterface.

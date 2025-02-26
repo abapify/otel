@@ -1,9 +1,7 @@
-interface zif_otel_span_serializable
+interface zif_abap2otel_span
   public .
 
-  interfaces if_serializable_object.
-
-  types:
+    types:
     begin of attributes_ts,
       key   type string,
       value type string,
@@ -41,7 +39,5 @@ interface zif_otel_span_serializable
       status         type string,
       links          type table of link_ts with empty key,
     end of span_ts.
-
-  data span_data type span_ts read-only.
 
 endinterface.

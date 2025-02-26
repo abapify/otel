@@ -1,6 +1,7 @@
 interface ZIF_OTEL_MSG
   public .
 
+  interfaces if_serializable_object.
 
   methods GET_BINARY
     returning

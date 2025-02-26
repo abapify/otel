@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>ZIF_OTEL_METRIC_SERIALIZABLE</CLSNAME>
+    <CLSNAME>ZIF_ABAP2OTEL_METRIC</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Serializable metric</DESCRIPT>
+    <DESCRIPT>ABAP2OTEL metric types</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>
     <STATE>1</STATE>
     <UNICODE>X</UNICODE>

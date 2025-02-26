@@ -1,6 +1,7 @@
 interface zif_otel_logs_api
   public .
 
-  " WIP
+  " log message
+  methods log importing message type string.
 
 endinterface.

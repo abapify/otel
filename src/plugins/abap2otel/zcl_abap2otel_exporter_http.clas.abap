@@ -1,6 +1,6 @@
 class zcl_abap2otel_exporter_http definition
   public
-  inheriting from zcl_abap2otel_span_processor
+  inheriting from zcl_abap2otel_exporter
   create public .
 
   public section.
