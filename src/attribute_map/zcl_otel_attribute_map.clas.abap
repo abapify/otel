@@ -15,9 +15,12 @@ class zcl_otel_attribute_map definition  public
 
     data map type ref to zif_otel_map.
 
-endclass.
+ENDCLASS.
 
-class zcl_otel_attribute_map implementation.
+
+
+CLASS ZCL_OTEL_ATTRIBUTE_MAP IMPLEMENTATION.
+
 
   method constructor.
 
@@ -25,6 +28,7 @@ class zcl_otel_attribute_map implementation.
     me->map = new zcl_otel_map(  ).
 
   endmethod.
+
 
   method zif_otel_attribute_map~attribute.
 
@@ -48,6 +52,7 @@ class zcl_otel_attribute_map implementation.
 
   endmethod.
 
+
   method zif_otel_attribute_map~values.
 
     result = value #(
@@ -68,6 +73,7 @@ class zcl_otel_attribute_map implementation.
 
   ENDMETHOD.
 
+
   METHOD zif_otel_attribute_map~append.
 
     loop at entries into data(ls_entry).
@@ -75,5 +81,4 @@ class zcl_otel_attribute_map implementation.
     endloop.
 
   ENDMETHOD.
-
-endclass.
+ENDCLASS.
