@@ -1,21 +1,24 @@
-class zcl_otel_http_exporter definition
+class ZCL_OTEL_PUBLISHER_HTTP definition
   public
-   .
+  create public .
 
-  public section.
-    interfaces zif_otel_msg_bus all methods final.
+public section.
 
-    events message_published exporting value(message) type ref to zif_otel_msg.
+  interfaces ZIF_OTEL_MSG_BUS
+      all methods final .
 
-    types destination_type type ref to zif_fetch_destination.
+  types DESTINATION_TYPE type ref to ZIF_FETCH_DESTINATION .
 
-    methods
-        constructor importing
+  events MESSAGE_PUBLISHED
+    exporting
+      value(MESSAGE) type ref to ZIF_OTEL_MSG .
+
         " destination is optinal because this class may be redefined
         " alternative pattern is to redefine destination( ) method
-        destination type destination_type optional
-        preferred parameter destination.
-
+  methods CONSTRUCTOR
+    importing
+      !DESTINATION type DESTINATION_TYPE optional
+    preferred parameter DESTINATION .
   protected section.
     methods destination returning value(destination) type ref to zif_fetch_destination.
     methods client returning value(client) type ref to zif_fetch_client raising cx_static_check.
@@ -36,10 +39,10 @@ ENDCLASS.
 
 
 
-CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
+CLASS ZCL_OTEL_PUBLISHER_HTTP IMPLEMENTATION.
 
 
-  method client.
+  method CLIENT.
     data(destination) = destination( ).
     if destination is not bound.
         throw( '[Otel HTTP Exporter] Fetch destination is not provided').
@@ -49,17 +52,17 @@ CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
   endmethod.
 
 
-   METHOD constructor.
+   METHOD CONSTRUCTOR.
     me->_destination = destination.
   ENDMETHOD.
 
 
-  METHOD destination.
+  METHOD DESTINATION.
     destination = me->_destination.
   ENDMETHOD.
 
 
-  method request.
+  method REQUEST.
     data(lo_request) = client->request( ).
     " method always POST as of now
     " do not know another cases when it should be different
@@ -72,12 +75,12 @@ CLASS ZCL_OTEL_HTTP_EXPORTER IMPLEMENTATION.
   endmethod.
 
 
-  METHOD throw.
+  METHOD THROW.
     new zcl_throw( )->throw( message ).
   ENDMETHOD.
 
 
-  method zif_otel_msg_bus~publish.
+  method ZIF_OTEL_MSG_BUS~PUBLISH.
     data(client) = client( ).
     data(request) = request( client = client message = message ).
     data(response) = client->fetch( request ).
