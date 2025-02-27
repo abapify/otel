@@ -6,6 +6,7 @@ public section.
 
   interfaces ZIF_OTEL_MSG_BUS
       all methods final .
+  interfaces ZIF_OTEL_PUBLISHER .
 
   types DESTINATION_TYPE type ref to ZIF_FETCH_DESTINATION .
 
@@ -89,5 +90,13 @@ CLASS ZCL_OTEL_PUBLISHER_HTTP IMPLEMENTATION.
       exporting
         message = message
     .
+  endmethod.
+
+
+  method ZIF_OTEL_PUBLISHER~START.
+  endmethod.
+
+
+  method ZIF_OTEL_PUBLISHER~STOP.
   endmethod.
 ENDCLASS.
