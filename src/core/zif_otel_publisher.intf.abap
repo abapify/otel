@@ -2,10 +2,10 @@ interface ZIF_OTEL_PUBLISHER
   public .
 
 
-  interfaces ZIF_OTEL_MSG_BUS .
+  interfaces zif_otel_stream .
 
   aliases PUBLISH
-    for ZIF_OTEL_MSG_BUS~PUBLISH .
+    for zif_otel_stream~PUBLISH .
 
   methods START .
   methods STOP .

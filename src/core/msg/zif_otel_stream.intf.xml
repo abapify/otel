@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>ZIF_OTEL_MSG_BUS</CLSNAME>
+    <CLSNAME>ZIF_OTEL_STREAM</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Message bus</DESCRIPT>
+    <DESCRIPT>Message stream (inbound)</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>
     <STATE>1</STATE>
     <UNICODE>X</UNICODE>

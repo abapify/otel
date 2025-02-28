@@ -9,4 +9,5 @@ interface ZIF_OTEL_MSG
   methods CONTENT_TYPE
     returning
       value(CONTENT_TYPE) type STRING .
+
 endinterface.

@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_ABAP2OTEL_EXPORTER</CLSNAME>
+    <CLSNAME>ZCL_OTEL_BUFFER_EXPORTER</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>ABAP2Otel exporter</DESCRIPT>
+    <DESCRIPT>Base exporter</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

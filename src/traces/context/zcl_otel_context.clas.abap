@@ -46,4 +46,20 @@ class zcl_otel_context implementation.
 
   ENDMETHOD.
 
+  METHOD zif_otel_context~get_value.
+
+  ENDMETHOD.
+
+  METHOD zif_otel_context~set_value.
+
+  ENDMETHOD.
+
+  METHOD zif_otel_context~delete_value.
+
+  ENDMETHOD.
+
+  METHOD zif_otel_context~get_entries.
+
+  ENDMETHOD.
+
 endclass.

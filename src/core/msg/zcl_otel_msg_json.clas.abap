@@ -5,6 +5,7 @@ class ZCL_OTEL_MSG_JSON definition
 
 public section.
 
+  interfaces IF_SERIALIZABLE_OBJECT .
   interfaces ZIF_OTEL_MSG .
 protected section.
 

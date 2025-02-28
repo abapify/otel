@@ -4,8 +4,6 @@ class ZCL_OTEL_PUBLISHER_HTTP definition
 
 public section.
 
-  interfaces ZIF_OTEL_MSG_BUS
-      all methods final .
   interfaces ZIF_OTEL_PUBLISHER .
 
   types DESTINATION_TYPE type ref to ZIF_FETCH_DESTINATION .
@@ -81,7 +79,15 @@ CLASS ZCL_OTEL_PUBLISHER_HTTP IMPLEMENTATION.
   ENDMETHOD.
 
 
-  method ZIF_OTEL_MSG_BUS~PUBLISH.
+  method ZIF_OTEL_PUBLISHER~START.
+  endmethod.
+
+
+  method ZIF_OTEL_PUBLISHER~STOP.
+  endmethod.
+
+
+  method ZIF_OTEL_stream~PUBLISH.
     data(client) = client( ).
     data(request) = request( client = client message = message ).
     data(response) = client->fetch( request ).
@@ -90,13 +96,5 @@ CLASS ZCL_OTEL_PUBLISHER_HTTP IMPLEMENTATION.
       exporting
         message = message
     .
-  endmethod.
-
-
-  method ZIF_OTEL_PUBLISHER~START.
-  endmethod.
-
-
-  method ZIF_OTEL_PUBLISHER~STOP.
   endmethod.
 ENDCLASS.
