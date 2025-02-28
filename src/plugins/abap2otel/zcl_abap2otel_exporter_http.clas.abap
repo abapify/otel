@@ -7,7 +7,7 @@ class zcl_abap2otel_exporter_http definition
 
     types headers_type type zif_fetch_entity=>header_tt .
 
-    data exporter type ref to zcl_otel_http_exporter read-only .
+    data publisher type ref to zcl_otel_publisher_http read-only .
 
     methods constructor
       importing
@@ -19,8 +19,8 @@ endclass.
 
 class zcl_abap2otel_exporter_http implementation.
   method constructor.
-    data(exporter) = new zcl_otel_http_exporter( destination ).
-    super->constructor( message_bus = exporter batch_size = batch_size ).
-    me->exporter = exporter.
+    data(publisher) = new zcl_otel_publisher_http( destination ).
+    super->constructor( message_bus = publisher batch_size = batch_size ).
+    me->publisher = publisher.
   endmethod.
 endclass.
