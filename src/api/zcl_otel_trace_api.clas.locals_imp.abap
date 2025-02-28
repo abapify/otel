@@ -4,47 +4,63 @@
 
 class lcl_noop_span definition.
   public section.
-  interfaces zif_otel_span.
-  interfaces zif_otel_attribute_map.
-  interfaces zif_otel_attribute.
+    interfaces zif_otel_span.
+    interfaces zif_otel_attribute_map.
+    interfaces zif_otel_attribute.
 endclass.
 
-CLASS lcl_noop_span IMPLEMENTATION.
-  METHOD zif_otel_span~end.
-  ENDMETHOD.
-  METHOD zif_otel_span~fail.
-  ENDMETHOD.
-  METHOD zif_otel_span~log.
-  ENDMETHOD.
-  METHOD zif_otel_span~link.
-  ENDMETHOD.
-  METHOD zif_otel_has_attributes~attributes.
+class lcl_noop_span implementation.
+  method zif_otel_span~end.
+  endmethod.
+  method zif_otel_span~fail.
+  endmethod.
+  method zif_otel_span~log.
+  endmethod.
+  method zif_otel_span~link.
+  endmethod.
+  method zif_otel_has_attributes~attributes.
     result = me.
-  ENDMETHOD.
-  METHOD zif_otel_attribute_map~attribute.
+  endmethod.
+  method zif_otel_attribute_map~attribute.
     result = me.
-  ENDMETHOD.
-  METHOD zif_otel_attribute_map~values.
-  ENDMETHOD.
-  METHOD zif_otel_attribute_map~entries.
-  ENDMETHOD.
-  METHOD zif_otel_attribute_map~append.
-  ENDMETHOD.
-  METHOD zif_otel_attribute~get.
-  ENDMETHOD.
-  METHOD zif_otel_attribute~set.
-  ENDMETHOD.
-  METHOD zif_otel_attribute~set_getter.
-  ENDMETHOD.
-  METHOD zif_otel_span_context~get_context.
+  endmethod.
+  method zif_otel_attribute_map~values.
+  endmethod.
+  method zif_otel_attribute_map~entries.
+  endmethod.
+  method zif_otel_attribute_map~append.
+  endmethod.
+  method zif_otel_attribute~get.
+  endmethod.
+  method zif_otel_attribute~set.
+  endmethod.
+  method zif_otel_attribute~set_getter.
+  endmethod.
+  method zif_otel_span_context~get_context.
 
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+  method zif_otel_context~delete_value.
+
+  endmethod.
+
+  method zif_otel_context~get_entries.
+
+  endmethod.
+
+  method zif_otel_context~get_value.
+
+  endmethod.
+
+  method zif_otel_context~set_value.
+
+  endmethod.
+
+endclass.
 
 class lcl_noop_tracer definition.
   public section.
-  interfaces zif_otel_tracer.
+    interfaces zif_otel_tracer.
 endclass.
 
 class lcl_noop_tracer implementation.

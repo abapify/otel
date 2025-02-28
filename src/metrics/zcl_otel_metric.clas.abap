@@ -59,7 +59,7 @@ CLASS ZCL_OTEL_METRIC IMPLEMENTATION.
 
   method zif_otel_metric~set_double.
 
-    me->options-value_type = zif_otel_metric=>double.
+    me->options-value_type = zif_otel_metric=>value_types-double.
 
   endmethod.
 

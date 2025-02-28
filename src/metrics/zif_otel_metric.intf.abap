@@ -2,16 +2,16 @@ interface zif_otel_metric
   public .
 
 
-  types:
-    begin of enum te_value_type,
-      int,
-      double,
-    end of enum te_value_type .
+  constants:
+    begin of value_types,
+      int type string value 'int',
+      double type string value 'double',
+    end of value_types .
   types:
     begin of ts_metric_options,
       unit        type string,
       description type string,
-      value_type  type te_value_type,
+      value_type  type string,
     end of ts_metric_options .
   types attributes_type type zif_otel_attribute_map=>entries_tt .
   types context_type type ref to zif_otel_context .
