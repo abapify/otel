@@ -51,6 +51,7 @@ CLASS ZCL_OTEL_MSG_JSON IMPLEMENTATION.
     call transformation id
     options
       initial_components = 'suppress'
+      data_refs = 'embedded'
       source (source)
       result xml json.
 

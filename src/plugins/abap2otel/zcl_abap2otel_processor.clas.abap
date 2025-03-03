@@ -11,6 +11,7 @@ class zcl_abap2otel_processor definition
 
     interfaces zif_otel_metrics_processor .
     interfaces zif_otel_trace_processor .
+    interfaces zif_otel_logs_processor.
 
   protected section.
   private section.
@@ -89,7 +90,36 @@ class zcl_abap2otel_processor implementation.
 
   method constructor.
 
-    me->buffer = cond #(  when buffer is bound then buffer else new #(  ) ).
+    me->buffer = cond #( when buffer is bound then buffer else new #( ) ).
+
+  endmethod.
+
+  method zif_otel_logs_processor~on_log_record_added.
+
+    check logger is bound.
+    check record is bound.
+
+    " handling context if provided
+    if record->context is bound.
+      try.
+          data(span_context) = cast zif_otel_span_context( record->context ).
+          data(span_context_data) = span_context->get_context( ).
+        catch cx_sy_move_cast_error.
+      endtry.
+    endif.
+
+    buffer->add_log( value #(
+      attrs = cond #( when record->attributes is bound then record->attributes->entries( ) )
+      " it must be string to support 0 values
+      " otherwise in combination with intital_components = suppress
+      " during transformation value will be removed
+      body = record->body
+      ts = record->timestamp
+      severity = record->severity
+      trace_id = span_context_data-trace_id
+      span_id = span_context_data-span_id
+    ) ).
+
 
   endmethod.
 

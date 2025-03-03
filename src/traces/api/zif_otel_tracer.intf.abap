@@ -1,15 +1,15 @@
-interface ZIF_OTEL_TRACER
+interface zif_otel_tracer
   public .
 
 
-          "value(CONTEXT) type ZIF_TRACE_SPAN_CONTEXT=>SPAN_CONTEXT_TS optional
-          "ATTRIBUTES type ZIF_TRACE_ATTRIBUTES=>ATTRIBUTES_TT optional
-  methods START_SPAN
+  "value(CONTEXT) type ZIF_TRACE_SPAN_CONTEXT=>SPAN_CONTEXT_TS optional
+  "ATTRIBUTES type ZIF_TRACE_ATTRIBUTES=>ATTRIBUTES_TT optional
+  methods start_span
     importing
-      !NAME type CSEQUENCE
-      value(CONTEXT) type ref to ZIF_OTEL_CONTEXT optional
-      !DEFAULT_CONTEXT type ABAP_BOOL optional
-      !STACK_DEPTH type I default 1
+      !name            type csequence
+      value(context)   type ref to zif_otel_span_context optional
+      !default_context type abap_bool optional
+      !stack_depth     type i default 1
     returning
-      value(RESULT) type ref to ZIF_OTEL_SPAN .
+      value(result)    type ref to zif_otel_span .
 endinterface.

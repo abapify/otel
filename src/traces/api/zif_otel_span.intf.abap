@@ -42,6 +42,7 @@ interface ZIF_OTEL_SPAN
       !REASON type STRING optional
       stack_depth type i optional
       preferred parameter reason.
+
   methods LOG
     importing
       !NAME type STRING

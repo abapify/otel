@@ -5,7 +5,6 @@ class zcl_otel_tracer definition
 
   public section.
     interfaces zif_otel_tracer.
-    interfaces zif_otel_has_context.
     methods constructor.
 
 
@@ -23,23 +22,26 @@ class zcl_otel_tracer definition
     events:
       span_start
         exporting
-            value(span) type ref to zif_otel_span
-            value(stack_depth) type i ,
+          value(span)        type ref to zif_otel_span
+          value(stack_depth) type i ,
       span_end
         exporting
-            value(span) type ref to zif_otel_span
-            value(stack_depth) type i ,
+          value(span)        type ref to zif_otel_span
+          value(stack_depth) type i ,
 
       span_event
         exporting
-            value(span_event) type ref to zif_otel_span_event
-            value(stack_depth) type i .
+          value(span_event)  type ref to zif_otel_span_event
+          value(stack_depth) type i .
 
-ENDCLASS.
+    methods
+      last_span returning value(result) type ref to zif_otel_span.
+
+endclass.
 
 
 
-CLASS ZCL_OTEL_TRACER IMPLEMENTATION.
+class zcl_otel_tracer implementation.
 
 
   method constructor.
@@ -66,28 +68,10 @@ CLASS ZCL_OTEL_TRACER IMPLEMENTATION.
 
   endmethod.
 
-
-  method zif_otel_has_context~context.
-
-    data(last_span) = me->span_stack->last( ).
-    check last_span is bound.
-
-*    field-symbols <last_span> type ref to object.
-    assign last_span->* to field-symbol(<last_span>).
-    check <last_span> is assigned.
-
-    try.
-      result = cast #( <last_span> ).
-      catch cx_sy_move_cast_error.
-    endtry.
-
-  endmethod.
-
-
   method zif_otel_tracer~start_span.
 
     if context is not bound and default_context eq abap_true.
-      context = me->zif_otel_has_context~context( ).
+      context = me->last_span( ).
     endif.
 
     data(span) = new zcl_otel_span(
@@ -105,4 +89,21 @@ CLASS ZCL_OTEL_TRACER IMPLEMENTATION.
     raise event span_start exporting span = span  stack_depth = stack_depth + 1.
 
   endmethod.
-ENDCLASS.
+  method last_span.
+
+    data(last_span) = me->span_stack->last( ).
+    check last_span is bound.
+
+*    field-symbols <last_span> type ref to object.
+    assign last_span->* to field-symbol(<last_span>).
+    check <last_span> is assigned.
+
+    try.
+        result = <last_span>.
+      catch cx_sy_move_cast_error.
+    endtry.
+
+
+  endmethod.
+
+endclass.

@@ -83,12 +83,17 @@ CLASS ZCL_ABAP2OTEL_MSG IMPLEMENTATION.
 
     " otherwise we need to introduce a static format with data as root
     " currently it is not supported by our ABAP2Otel spec
+    if me->message->spans is not initial.
+      result = value #( ( name = 'SPANS'  value = ref #( me->message->spans ) ) ).
+    endif.
 
-    result = value #(
-     ( name = 'SPANS'  value = ref #( me->message->spans ) )
-     ( name = 'LOGS'   value = ref #( me->message->logs ) )
-     ( name = 'METRICS' value = ref #( me->message->metrics ) )
-    ).
+    if me->message->logs is not initial.
+      result = value #( base result ( name = 'LOGS'  value = ref #( me->message->logs ) ) ).
+    endif.
+
+    if me->message->metrics is not initial.
+      result = value #( base result ( name = 'METRICS'  value = ref #( me->message->metrics ) ) ).
+    endif.
 
   endmethod.
 

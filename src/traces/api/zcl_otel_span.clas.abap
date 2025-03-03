@@ -1,59 +1,58 @@
-class ZCL_OTEL_SPAN definition
+class zcl_otel_span definition
   public
   final
   create private
 
-  global friends ZCL_OTEL_TRACER .
+  global friends zcl_otel_tracer .
 
-public section.
+  public section.
 
-  interfaces ZIF_OTEL_HAS_ATTRIBUTES .
-  interfaces ZIF_OTEL_CONTEXT .
-  interfaces ZIF_OTEL_SPAN .
-  interfaces ZIF_OTEL_SPAN_CONTEXT .
+    interfaces zif_otel_has_attributes .
+    interfaces zif_otel_span .
+    interfaces zif_otel_span_context .
 
-  methods CONSTRUCTOR
-    importing
-      !NAME type CSEQUENCE
-      value(START_TIME) type TIMESTAMPL optional
-      !CONTEXT type ref to ZIF_OTEL_CONTEXT optional .
+    methods constructor
+      importing
+        !name             type csequence
+        value(start_time) type timestampl optional
+        !context          type ref to zif_otel_span_context optional .
   protected section.
-private section.
+  private section.
 
-  aliases END_TIME
-    for ZIF_OTEL_SPAN~END_TIME .
-  aliases EVENTS
-    for ZIF_OTEL_SPAN~EVENTS .
-  aliases LINKS
-    for ZIF_OTEL_SPAN~LINKS .
-  aliases NAME
-    for ZIF_OTEL_SPAN~NAME .
-  aliases PARENT_SPAN_ID
-    for ZIF_OTEL_SPAN~PARENT_SPAN_ID .
-  aliases SPAN_ID
-    for ZIF_OTEL_SPAN~SPAN_ID .
-  aliases START_TIME
-    for ZIF_OTEL_SPAN~START_TIME .
-  aliases STATUS
-    for ZIF_OTEL_SPAN~STATUS .
-  aliases TRACE_ID
-    for ZIF_OTEL_SPAN~TRACE_ID .
+    aliases end_time
+      for zif_otel_span~end_time .
+    aliases events
+      for zif_otel_span~events .
+    aliases links
+      for zif_otel_span~links .
+    aliases name
+      for zif_otel_span~name .
+    aliases parent_span_id
+      for zif_otel_span~parent_span_id .
+    aliases span_id
+      for zif_otel_span~span_id .
+    aliases start_time
+      for zif_otel_span~start_time .
+    aliases status
+      for zif_otel_span~status .
+    aliases trace_id
+      for zif_otel_span~trace_id .
 
-  data ATTRIBUTES type ref to ZCL_OTEL_ATTRIBUTE_MAP .
+    data attributes type ref to zcl_otel_attribute_map .
 
-  events SPAN_END
-    exporting
-      value(STACK_DEPTH) type I .
-  events SPAN_EVENT
-    exporting
-      value(EVENT) type ref to ZIF_OTEL_SPAN_EVENT
-      value(STACK_DEPTH) type I .
+    events span_end
+      exporting
+        value(stack_depth) type i .
+    events span_event
+      exporting
+        value(event)       type ref to zif_otel_span_event
+        value(stack_depth) type i .
 
-ENDCLASS.
+endclass.
 
 
 
-CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
+class zcl_otel_span implementation.
 
 
   method constructor.
@@ -67,12 +66,8 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
 
     " inherit context from the parent span
     if context is bound.
-      try.
-          data(span_context) = cast zif_otel_span_context( context ).
-          me->trace_id = span_context->trace_id.
-          me->parent_span_id = span_context->span_id.
-        catch cx_sy_move_cast_error.
-      endtry.
+      me->trace_id = context->trace_id.
+      me->parent_span_id = context->span_id.
     endif.
 
     " trace id should be always generated ( if not inherited )
@@ -132,7 +127,7 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
     endif.
 
     me->zif_otel_span~end(
-        status = me->zif_otel_span~span_status-error
+      status = me->zif_otel_span~span_status-error
     ).
 
   endmethod.
@@ -156,20 +151,5 @@ CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
     raise event span_event exporting event = event stack_depth = stack_depth + 1..
 
   endmethod.
-  METHOD ZIF_OTEL_CONTEXT~DELETE_VALUE.
 
-  ENDMETHOD.
-
-  METHOD ZIF_OTEL_CONTEXT~GET_ENTRIES.
-
-  ENDMETHOD.
-
-  METHOD ZIF_OTEL_CONTEXT~GET_VALUE.
-
-  ENDMETHOD.
-
-  METHOD ZIF_OTEL_CONTEXT~SET_VALUE.
-
-  ENDMETHOD.
-
-ENDCLASS.
+endclass.

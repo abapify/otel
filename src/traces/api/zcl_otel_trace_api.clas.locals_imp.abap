@@ -37,25 +37,7 @@ class lcl_noop_span implementation.
   method zif_otel_attribute~set_getter.
   endmethod.
   method zif_otel_span_context~get_context.
-
   endmethod.
-
-  method zif_otel_context~delete_value.
-
-  endmethod.
-
-  method zif_otel_context~get_entries.
-
-  endmethod.
-
-  method zif_otel_context~get_value.
-
-  endmethod.
-
-  method zif_otel_context~set_value.
-
-  endmethod.
-
 endclass.
 
 class lcl_noop_tracer definition.
