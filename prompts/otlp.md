@@ -34,16 +34,18 @@ please use following pattern:
 
 ```
 types:
-severity_number_type type i.
+  severity_number_type type i.
+
 constants:
-begin of Severity_Number,
-TRACE type severity_number_type value 1,
-TRACE2 type severity_number_type value 2,
-...
-end of Severity_Number.
+  begin of Severity_Number,
+    TRACE type severity_number_type value 1,
+    TRACE2 type severity_number_type value 2,
+    ...
+  end of Severity_Number.
 ```
 
 notice that we are removing severity* prefix because all fields of enum start with severity*
+Also notice that types and constants can't be declared in one block - those are separate.
 
 ## Type mapping
 
