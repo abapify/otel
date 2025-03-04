@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "gen-otlp": "codygen chat --config otlp.codygen.config.ts"
+    "gen-otlp-common": "codygen chat --config otlp-common.codygen.ts",
+    "gen-otlp-trace": "codygen chat --config otlp-trace.codygen.ts",
+    "gen-otlp-logs": "codygen chat --config otlp-logs.codygen.ts",
+    "gen-otlp-metrics": "codygen chat --config otlp-metrics.codygen.ts"
   },
   "private": true,
   "dependencies": {

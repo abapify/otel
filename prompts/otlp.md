@@ -6,26 +6,18 @@ This is machine generated promt and it will be parsed by machine.
 - do not give summary
 - even similar steps should be done for other files - please provide each - do not skip anything!
 - please generate all of the requested interfaces - do not skip anything!
-- do not stop - generate everything with one response
+- do not stop - generate everything with one response fully. don't break files in the middle
 - each code snippet should come with a file name like ```json:tsconfig.json
-- do not imagine any new paths - all files are in root
+- do not imagine any file paths - all files should be be in a root (just filename)
 - please think before responding - don't hallutinate
 
-## Context
+## Common
 
-We need to convert the given in the context proto scemas to ABAP interfaces.
+- resource is zif_otel_otlp_resource=>resource
 
-Here is the list of interfaces that you should generate:
+## Enums
 
-- ZIF_OTEL_OTLP_COMMON
-- ZIF_OTEL_OTLP_RESOURCE
-- ZIF_OTEL_OTLP_TRACE
-- ZIF_OTEL_OTLP_LOGS
-- ZIF_OTEL_OTLP_METRICS
-
-## Severity
-
-For severity enum
+For enums like SeverityNumber we need to create an enum type like this:
 
 ```
 enum SeverityNumber {
@@ -50,6 +42,8 @@ TRACE2 type severity_number_type value 2,
 ...
 end of Severity_Number.
 ```
+
+notice that we are removing severity* prefix because all fields of enum start with severity*
 
 ## Type mapping
 
