@@ -6,7 +6,7 @@ INTERFACE zif_otel_otlp_metrics PUBLIC.
     "! AggregationTemporality enum type
     aggregation_temporality_type TYPE i,
 
-    "! DataPointFlags enum type  
+    "! DataPointFlags enum type
     data_point_flags_type TYPE i.
 
   CONSTANTS:
@@ -46,7 +46,7 @@ INTERFACE zif_otel_otlp_metrics PUBLIC.
       flags             TYPE i,
     END OF number_data_point,
 
-    "! Table of number data points  
+    "! Table of number data points
     number_data_points TYPE STANDARD TABLE OF number_data_point WITH EMPTY KEY,
 
     "! Single gauge metric

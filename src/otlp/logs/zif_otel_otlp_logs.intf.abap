@@ -6,7 +6,7 @@ INTERFACE zif_otel_otlp_logs PUBLIC.
     "! Severity number type
     severity_number_type TYPE i,
 
-    "! Log record flags type  
+    "! Log record flags type
     log_record_flags_type TYPE i.
 
   CONSTANTS:

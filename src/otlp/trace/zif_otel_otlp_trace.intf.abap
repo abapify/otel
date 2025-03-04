@@ -6,7 +6,7 @@ INTERFACE zif_otel_otlp_trace PUBLIC.
     "! Status code enum type
     status_code_type TYPE i,
 
-    "! Span kind enum type  
+    "! Span kind enum type
     span_kind_type TYPE i,
 
     "! Span flags enum type
@@ -20,7 +20,7 @@ INTERFACE zif_otel_otlp_trace PUBLIC.
       error TYPE status_code_type VALUE 2,
     END OF status_code,
 
-    "! Span kind enum values 
+    "! Span kind enum values
     BEGIN OF span_kind,
       unspecified TYPE span_kind_type VALUE 0,
       internal    TYPE span_kind_type VALUE 1,
