@@ -10,5 +10,5 @@ export default config({
         'git_modules/open-telemetry/opentelemetry-proto/opentelemetry/proto/logs/v1/logs.proto'
     ]
     ,
-    output: 'src/gen/otlp',
+    output: 'src/otlp',
 });

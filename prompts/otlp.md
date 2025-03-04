@@ -40,7 +40,8 @@ please use following pattern:
 
 ```
 types:
-constants: severity_number_type type i.
+severity_number_type type i.
+constants:
 begin of Severity_Number,
 TRACE type severity_number_type value 1,
 TRACE2 type severity_number_type value 2,
