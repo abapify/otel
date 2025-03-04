@@ -53,6 +53,7 @@ notice that we are removing severity* prefix because all fields of enum start wi
 - bool is xsdboolean
 - timestamp is XSDDATETIME_Z
 - binary becomes string too, not xstring
+- int64 is string
 
 ## Naming conventions
 
@@ -64,34 +65,3 @@ notice that we are removing severity* prefix because all fields of enum start wi
 
 - please resolve properly all references in proto against newly generated interfaces
 - please analyze that you resolve all references in the proto schema properly
-
-For example - this is wrong
-
-```
-  TYPES:
-    "! Any value type
-    BEGIN OF any_value,
-      array_value  TYPE REF TO data, "Will be array_value type
-    END OF any_value,
-
-    "! Array of any values
-    BEGIN OF array_value,
-      values TYPE STANDARD TABLE OF any_value WITH EMPTY KEY,
-    END OF array_value
-```
-
-it should be
-
-```
-  TYPES:
-    "! Array of any values
-    BEGIN OF array_value,
-      values TYPE STANDARD TABLE OF any_value WITH EMPTY KEY,
-    END OF array_value,
-     "! Any value type
-    BEGIN OF any_value,
-      array_value  TYPE  array_value
-    END OF any_value,
-```
-
-Please think carefully before responding.
