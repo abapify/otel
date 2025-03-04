@@ -1,0 +1,25 @@
+{
+  "name": "@abapify/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "gen-otlp": "codygen chat --config otlp.codygen.config.ts"
+  },
+  "private": true,
+  "dependencies": {
+    "codygen": "^1.6.0"
+  },
+  "devDependencies": {
+    "@nx/js": "20.4.6",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "nx": "20.4.6",
+    "prettier": "^2.6.2",
+    "tslib": "^2.3.0",
+    "typescript": "~5.7.2"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

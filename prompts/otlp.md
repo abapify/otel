@@ -1,0 +1,30 @@
+# Generate OTLP interfaces in ABAP
+
+This is machine generated promt and it will be parsed by machine.
+
+- do not use intro
+- do not give summary
+- even similar steps should be done for other files - please provide each - do not skip anything!
+- please generate all of the requested interfaces - do not skip anything!
+
+## Context
+
+We need to convert the given in the context proto scemas to ABAP interfaces.
+
+Here is the list of interfaces that you should generate:
+
+- ZIF_OTEL_OTLP_COMMON
+- ZIF_OTEL_OTLP_RESOURCE
+- ZIF_OTEL_OTLP_TRACE
+- ZIF_OTEL_OTLP_LOGS
+- ZIF_OTEL_OTLP_METRICS
+
+## Naming conventions
+
+- For example if file name is `example.proto` then interface should be ZIF_OTEL_OTLP_EXAMPLE
+- please generate types using snakeCase to snake_case conversion
+- types in the interface should be named as they are named in a proto schema. Only case conversion is required
+
+## Reference resolution
+
+- please resolve properly all references in proto against newly generated interfaces
