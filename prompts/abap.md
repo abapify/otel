@@ -23,3 +23,4 @@
 - every generated .abap file should come with a separate abapgit descriptor file
 - do not skip any single descriptor file. Since your output will be used in CI/CD - every file matters even if they are similar
 - awlays generate package.devc.xml
+- never generate root-level .abapgit.xml unless is asked explicitly
