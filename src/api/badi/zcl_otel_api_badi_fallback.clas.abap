@@ -1,15 +1,13 @@
-class ZCL_OTEL_API_BADI_FALLBACK definition inheriting from zcl_otel_api_badi_base
+class zcl_otel_api_badi_fallback definition inheriting from zcl_otel_api_badi_base
   public
   create public .
 
-public section.
-
+  public section.
   protected section.
+  private section.
+endclass.
 
-ENDCLASS.
+class zcl_otel_api_badi_fallback implementation.
+endclass.
 
 
-
-CLASS ZCL_OTEL_API_BADI_FALLBACK IMPLEMENTATION.
-
-ENDCLASS.
