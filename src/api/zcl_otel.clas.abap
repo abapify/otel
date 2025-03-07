@@ -9,6 +9,19 @@ class zcl_otel definition
     class-methods api importing scenario      type scenario_type optional
                       returning value(result) type ref to zif_otel_api.
 
+    class-methods tracer  importing scenario      type scenario_type optional
+                      returning value(result) type ref to zif_otel_tracer.
+
+    class-methods logger  importing scenario      type scenario_type optional
+                      returning value(result) type ref to zif_otel_logger.
+
+    class-methods meter  importing scenario      type scenario_type optional
+                      returning value(result) type ref to zif_otel_meter.
+
+
+
+
+
   protected section.
   private section.
 
@@ -44,6 +57,18 @@ class zcl_otel implementation.
        insert value #( scenario = scenario api = result ) into table cache.
 
     endtry.
+  endmethod.
+
+  method logger.
+  result = api( scenario )->logs( )->get_logger( ).
+  endmethod.
+
+  method meter.
+  result = api( scenario )->metrics( )->get_meter( ).
+  endmethod.
+
+  method tracer.
+  result = api( scenario )->trace( )->get_tracer( ).
   endmethod.
 
 endclass.

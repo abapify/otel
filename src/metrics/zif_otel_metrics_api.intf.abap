@@ -9,7 +9,7 @@ INTERFACE zif_otel_metrics_api
     "! @parameter name | The name of the meter
     get_meter
       IMPORTING
-        name        TYPE string
+        name        TYPE string optional
         " version     TYPE string OPTIONAL
         " schema_url  TYPE string OPTIONAL
         " attributes  TYPE any OPTIONAL

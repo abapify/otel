@@ -5,9 +5,9 @@ class zcl_otel_api definition
 
   public section.
 
-    class-methods traces returning value(result) type ref to zif_otel_trace_api.
-    class-methods logs returning value(result) type ref to zif_otel_logs_api.
-    class-methods metrics returning value(result) type ref to zif_otel_metrics_api.
+    class-methods traces importing scenario type string optional returning value(result) type ref to zif_otel_trace_api.
+    class-methods logs importing scenario type string optional returning value(result) type ref to zif_otel_logs_api.
+    class-methods metrics importing scenario type string optional returning value(result) type ref to zif_otel_metrics_api.
 
   protected section.
   private section.
@@ -17,19 +17,19 @@ endclass.
 class zcl_otel_api implementation.
   method logs.
 
-    result = zcl_otel=>api( )->logs( ).
+    result = zcl_otel=>api( scenario )->logs( ).
 
   endmethod.
 
   method metrics.
 
-    result = zcl_otel=>api( )->metrics( ).
+    result = zcl_otel=>api( scenario )->metrics( ).
 
   endmethod.
 
   method traces.
 
-   result = zcl_otel=>api( )->trace( ).
+   result = zcl_otel=>api( scenario )->trace( ).
 
   endmethod.
 
