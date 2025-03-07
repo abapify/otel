@@ -4,78 +4,33 @@ class zcl_otel_api definition
   abstract.
 
   public section.
-  interfaces zif_otel_api.
-  aliases traces for zif_otel_api~traces.
-  aliases logs for zif_otel_api~logs.
-  aliases metrics for zif_otel_api~metrics.
+
+    class-methods traces returning value(result) type ref to zif_otel_trace_api.
+    class-methods logs returning value(result) type ref to zif_otel_logs_api.
+    class-methods metrics returning value(result) type ref to zif_otel_metrics_api.
+
   protected section.
   private section.
-ENDCLASS.
 
+endclass.
 
+class zcl_otel_api implementation.
+  method logs.
 
-CLASS ZCL_OTEL_API IMPLEMENTATION.
-
-
-  method zif_otel_api~logs.
-
-    statics api type ref to zif_otel_logs_api.
-
-    if api is not bound.
-
-      data badi type ref to zotel_api_badi.
-
-      get badi badi.
-
-      call badi badi->zif_otel_api~logs
-        receiving
-          result = api.
-
-    endif.
-
-    result = api.
+    result = zcl_otel=>api( )->logs( ).
 
   endmethod.
 
+  method metrics.
 
-  method zif_otel_api~metrics.
-
-    statics api type ref to zif_otel_metrics_api.
-
-    if api is not bound.
-
-      data badi type ref to zotel_api_badi.
-
-      get badi badi.
-
-      call badi badi->zif_otel_api~metrics
-        receiving
-          result = api.
-
-    endif.
-
-    result = api.
+    result = zcl_otel=>api( )->metrics( ).
 
   endmethod.
 
+  method traces.
 
-  method zif_otel_api~traces.
-
-    statics api type ref to zif_otel_trace_api.
-
-    if api is not bound.
-
-      data badi type ref to zotel_api_badi.
-
-      get badi badi.
-
-      call badi badi->zif_otel_api~traces
-        receiving
-          result = api.
-
-    endif.
-
-    result = api.
+   result = zcl_otel=>api( )->trace( ).
 
   endmethod.
-ENDCLASS.
+
+endclass.

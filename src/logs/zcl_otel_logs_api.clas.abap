@@ -1,73 +1,58 @@
-class ZCL_OTEL_LOGS_API definition
+class zcl_otel_logs_api definition
   public
   final
-  create private .
+  create private
+  global friends zcl_otel_api_manager.
 
-public section.
+  public section.
 
-  interfaces ZIF_OTEL_LOGGER_PROVIDER .
-  interfaces ZIF_OTEL_LOGS_API .
+    interfaces zif_otel_logs_api_manager.
 
-  class-data API type ref to ZIF_OTEL_LOGS_API read-only .
-  class-data APP type ref to ZCL_OTEL_LOGS_API .
+  protected section.
+  private section.
 
-  methods USE
-    importing
-      !PROCESSOR type ref to ZIF_OTEL_LOGS_PROCESSOR .
-  class-methods CLASS_CONSTRUCTOR .
-  methods CONSTRUCTOR .
-  PRIVATE SECTION.
-    DATA logger_provider TYPE REF TO zcl_otel_logger_provider.
-    DATA processors TYPE TABLE OF REF TO zif_otel_logs_processor WITH EMPTY KEY.
+    data:
+      processors type table of ref to zif_otel_logs_processor with empty key ,
+      logger_provider type ref to zif_otel_logger_provider.
 
-    METHODS on_log_record_added FOR EVENT log_record_added OF zcl_otel_logger_provider
-      IMPORTING logger record.
-ENDCLASS.
+    methods on_log_record_added for event log_record_added of zcl_otel_logger_provider
+        importing logger log_record.
 
+endclass.
 
+class zcl_otel_logs_api implementation.
 
-CLASS ZCL_OTEL_LOGS_API IMPLEMENTATION.
+  method zif_otel_logs_api_manager~use.
+    append processor to processors.
+  endmethod.
 
+  method on_log_record_added.
 
-  METHOD on_log_record_added.
-    LOOP AT me->processors INTO DATA(lo_processor).
-      CHECK lo_processor IS BOUND.
-      lo_processor->on_log_record_added(
-        logger = logger
-        record = record
-      ).
-    ENDLOOP.
-  ENDMETHOD.
+    loop at processors into data(processor).
 
+        processor->on_log_record_added(
+          logger     = logger
+          log_record = log_record
+        ).
 
-  METHOD use.
-    CHECK processor IS BOUND.
-    APPEND processor TO me->processors.
-  ENDMETHOD.
+    endloop.
 
+  endmethod.
 
-  METHOD class_constructor.
-    DATA(this) = NEW zcl_otel_logs_api( ).
-    app = this.
-    api = this.
-  ENDMETHOD.
+  method zif_otel_logs_api~get_logger.
+    result = me->zif_otel_logs_api~get_logger_provider( )->get_logger( name ).
+  endmethod.
 
+  method zif_otel_logs_api~get_logger_provider.
 
-  METHOD zif_otel_logger_provider~get_logger.
+    if me->logger_provider is not bound.
+      data(logger_provider) = new zcl_otel_logger_provider( ).
+      set handler on_log_record_added for logger_provider.
+      me->logger_provider = logger_provider.
+    endif.
 
-    result = me->logger_provider->zif_otel_logger_provider~get_logger( name = name ).
+    result = me->logger_provider.
 
-  ENDMETHOD.
+  endmethod.
 
-
-  METHOD constructor.
-
-    super->constructor( ).
-
-    me->logger_provider = new #( ).
-
-    set handler on_log_record_added for me->logger_provider.
-
-
-  ENDMETHOD.
-ENDCLASS.
+endclass.

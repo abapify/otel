@@ -1,15 +1,17 @@
 class zcl_otel_tracer definition
   public
   final
-  create private global friends zcl_otel_trace_controller.
+  create private global friends zcl_otel_tracer_provider.
 
   public section.
     interfaces zif_otel_tracer.
-    methods constructor.
+    methods constructor importing name type string optional.
 
 
   protected section.
   private section.
+
+    aliases name for zif_otel_scope~name.
 
     data span_stack type ref to zif_otel_stack.
 
@@ -17,7 +19,7 @@ class zcl_otel_tracer definition
       on_span_end for event span_end of zcl_otel_span
         importing sender stack_depth,
       on_span_event for event span_event of zcl_otel_span
-        importing event stack_depth.
+        importing sender event stack_depth.
 
     events:
       span_start
@@ -31,6 +33,7 @@ class zcl_otel_tracer definition
 
       span_event
         exporting
+          value(span) type ref to zif_otel_span
           value(span_event)  type ref to zif_otel_span_event
           value(stack_depth) type i .
 
@@ -47,6 +50,7 @@ class zcl_otel_tracer implementation.
   method constructor.
 
     me->span_stack = new zcl_otel_stack(  ).
+    me->name = name.
 
   endmethod.
 
@@ -64,7 +68,7 @@ class zcl_otel_tracer implementation.
 
   method on_span_event.
 
-    raise event span_event exporting span_event = event  stack_depth = stack_depth + 1.
+    raise event span_event exporting span = sender span_event = event  stack_depth = stack_depth + 1.
 
   endmethod.
 
@@ -103,6 +107,10 @@ class zcl_otel_tracer implementation.
       catch cx_sy_move_cast_error.
     endtry.
 
+
+  endmethod.
+
+  method zif_otel_has_attributes~attributes.
 
   endmethod.
 

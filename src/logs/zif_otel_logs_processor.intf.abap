@@ -8,6 +8,6 @@ interface zif_otel_logs_processor public.
   "! @parameter record | The log record instance.
   methods on_log_record_added importing
     logger type ref to zif_otel_logger
-    record type ref to zif_otel_log_record.
+    log_record type ref to zif_otel_log_record.
 
 endinterface.

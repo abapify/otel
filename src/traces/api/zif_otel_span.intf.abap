@@ -50,4 +50,6 @@ interface ZIF_OTEL_SPAN
   methods LINK
     importing
       !CONTEXT type ref to ZIF_OTEL_SPAN_CONTEXT .
+
+ data kind type zif_otel_span_kind=>span_kind_type read-only.
 endinterface.

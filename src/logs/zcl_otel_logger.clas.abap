@@ -4,7 +4,7 @@ class zcl_otel_logger definition
   public
   final
   create private
-  global friends zcl_otel_logger_provider zcl_otel_logs_api.
+  global friends zcl_otel_logger_provider.
 
   public section.
     interfaces zif_otel_logger.
@@ -53,4 +53,8 @@ CLASS ZCL_OTEL_LOGGER IMPLEMENTATION.
     me->zif_otel_logger~emit( record ).
 
   endmethod.
+  METHOD ZIF_OTEL_HAS_ATTRIBUTES~ATTRIBUTES.
+
+  ENDMETHOD.
+
 ENDCLASS.

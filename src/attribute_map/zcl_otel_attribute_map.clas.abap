@@ -5,7 +5,8 @@ class zcl_otel_attribute_map definition  public
     interfaces zif_otel_attribute_map.
     aliases attribute for zif_otel_attribute_map~attribute.
     aliases get for zif_otel_attribute_map~attribute.
-    methods constructor.
+    methods constructor
+      importing entries type zif_otel_attribute_map=>entries_tt optional.
 
   protected section.
   private section.
@@ -26,6 +27,7 @@ CLASS ZCL_OTEL_ATTRIBUTE_MAP IMPLEMENTATION.
 
     super->constructor( ).
     me->map = new zcl_otel_map(  ).
+    me->zif_otel_attribute_map~append( entries ).
 
   endmethod.
 

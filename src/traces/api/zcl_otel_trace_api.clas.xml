@@ -11,14 +11,6 @@
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
-   <DESCRIPTIONS_SUB>
-    <SEOSUBCOTX>
-     <CMPNAME>START_SPAN</CMPNAME>
-     <SCONAME>RESULT</SCONAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Trace span</DESCRIPT>
-    </SEOSUBCOTX>
-   </DESCRIPTIONS_SUB>
   </asx:values>
  </asx:abap>
 </abapGit>

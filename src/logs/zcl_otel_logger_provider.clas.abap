@@ -24,13 +24,13 @@ class zcl_otel_logger_provider definition
       importing
         sender
         record
-        .
+      .
 
-     "! Event triggered when a log record is added.
+    "! Event triggered when a log record is added.
     events log_record_added
       exporting
         value(logger) type ref to zif_otel_logger
-        value(record) type ref to zif_otel_log_record.
+        value(log_record) type ref to zif_otel_log_record.
 
 endclass.
 
@@ -48,7 +48,7 @@ class zcl_otel_logger_provider implementation.
   endmethod.
 
   method on_log_record_added.
-    raise event log_record_added exporting logger = sender record = record.
+    raise event log_record_added exporting logger = sender log_record = record.
   endmethod.
 
 endclass.

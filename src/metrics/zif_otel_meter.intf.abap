@@ -2,6 +2,7 @@ INTERFACE zif_otel_meter
   PUBLIC.
 
   data name type string read-only.
+  interfaces zif_otel_scope.
 
   METHODS:
     create_counter

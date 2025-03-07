@@ -5,6 +5,8 @@ interface zif_otel_logger public.
   interfaces zif_otel_loggable.
   aliases log for zif_otel_loggable~log.
 
+  interfaces zif_otel_scope.
+
   "! Logger name for identification.
   data name type string read-only.
 

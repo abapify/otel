@@ -19,6 +19,7 @@ public section.
       !stream type STREAM_TYPE
       !BATCH_SIZE type I optional .
 
+protected section.
   private section.
 
     methods on_buffer_update for event updated of zif_otel_msg_buffer.
@@ -40,9 +41,13 @@ CLASS ZCL_OTEL_BUFFER_EXPORTER IMPLEMENTATION.
 
   method CONSTRUCTOR.
 
+    super->constructor( ).
+
     me->stream = stream.
     me->batch_size = batch_size.
     me->_buffer = buffer.
+
+    set handler on_buffer_update for buffer.
 
   endmethod.
 

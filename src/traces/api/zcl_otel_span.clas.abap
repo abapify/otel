@@ -14,8 +14,8 @@ class zcl_otel_span definition
     methods constructor
       importing
         !name             type csequence
-        value(start_time) type timestampl optional
-        !context          type ref to zif_otel_span_context optional .
+        !context          type ref to zif_otel_span_context optional
+        options           type zif_otel_span_options=>span_options optional.
   protected section.
   private section.
 
@@ -59,10 +59,10 @@ class zcl_otel_span implementation.
 
     " span start time
     " the earlier we count time - the better
-    if start_time is initial.
-      get time stamp field start_time.
+    me->start_time = options-start_time.
+    if me->start_time is initial.
+      get time stamp field me->start_time.
     endif.
-    me->start_time = start_time.
 
     " inherit context from the parent span
     if context is bound.
@@ -85,7 +85,10 @@ class zcl_otel_span implementation.
 
     me->name = name.
 
-    me->attributes = new zcl_otel_attribute_map( ).
+    me->attributes = new zcl_otel_attribute_map( options-attributes ).
+
+    " kind
+    me->zif_otel_span~kind = options-kind.
 
   endmethod.
 
