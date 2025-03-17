@@ -33,7 +33,7 @@ CLASS ZCL_OTEL_METRIC IMPLEMENTATION.
 
     data(data_point) = new zcl_otel_data_point(
       value = value
-      "context = context
+      context = context
       attributes = attributes ).
 
     raise event value_added exporting data_point = data_point.

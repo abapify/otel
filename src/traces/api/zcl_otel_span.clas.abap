@@ -13,9 +13,9 @@ class zcl_otel_span definition
 
     methods constructor
       importing
-        !name             type csequence
-        !context          type ref to zif_otel_span_context optional
-        options           type zif_otel_span_options=>span_options optional.
+        !name    type csequence
+        !context type ref to zif_otel_context optional
+        options  type zif_otel_span_options=>span_options optional.
   protected section.
   private section.
 
@@ -64,11 +64,20 @@ class zcl_otel_span implementation.
       get time stamp field me->start_time.
     endif.
 
-    " inherit context from the parent span
+
     if context is bound.
-      me->trace_id = context->trace_id.
-      me->parent_span_id = context->span_id.
+        try.
+            data(span_context) = cast zif_otel_span_context( context ).
+            me->trace_id = span_context->trace_id.
+
+            if options-root ne abap_true.
+                me->parent_span_id = span_context->span_id.
+            endif.
+          catch cx_sy_move_cast_error.
+        endtry.
     endif.
+
+
 
     " trace id should be always generated ( if not inherited )
     if me->trace_id is initial.
@@ -83,6 +92,12 @@ class zcl_otel_span implementation.
     " there is no out of the box function to generate 8-byte uuid
     me->span_id = lcl_randomizer=>generate_hex( 8 ).
 
+
+    me->zif_otel_has_context~context = new zcl_otel_span_context(
+      context = context
+      span    = me
+    ).
+
     me->name = name.
 
     me->attributes = new zcl_otel_attribute_map( options-attributes ).
@@ -94,15 +109,6 @@ class zcl_otel_span implementation.
 
   method zif_otel_has_attributes~attributes.
     result = me->attributes.
-  endmethod.
-
-  method zif_otel_span_context~get_context.
-    result = value #(
-    trace_id = me->trace_id
-    span_id = me->span_id
-    ).
-
-
   endmethod.
 
 
@@ -152,6 +158,15 @@ class zcl_otel_span implementation.
     append event to me->events.
 
     raise event span_event exporting event = event stack_depth = stack_depth + 1..
+
+  endmethod.
+
+  method zif_otel_span_context~get_span_context.
+
+    result = value #(
+        trace_id = me->zif_otel_span_context~trace_id
+        span_id = me->zif_otel_span_context~span_id
+    ).
 
   endmethod.
 

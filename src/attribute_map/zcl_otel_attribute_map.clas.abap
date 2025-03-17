@@ -68,7 +68,7 @@ CLASS ZCL_OTEL_ATTRIBUTE_MAP IMPLEMENTATION.
   METHOD zif_otel_attribute_map~entries.
 
       result = value #(
-        for value in me->map->values( )
+        for value in me->map->values( keys )
         let ref = cast attr_ref_type( value )
             entry = ref->*
         in ( name = entry->name value = entry->get( ) ) ).

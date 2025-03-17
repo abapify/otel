@@ -6,18 +6,12 @@ class zcl_otel_context definition
   public section.
     methods constructor importing context type ref to zif_otel_context optional.
     interfaces zif_otel_context.
-    interfaces zif_otel_has_attributes.
-
-    class-methods from importing context_data type any returning value(result) type ref to zif_otel_context.
-
   protected section.
   private section.
 
-  data attributes type ref to zcl_otel_attribute_map.
+  data value_map type ref to zif_otel_map.
 
 endclass.
-
-
 
 class zcl_otel_context implementation.
 
@@ -28,37 +22,35 @@ class zcl_otel_context implementation.
       me->zif_otel_context~parent_context  = context.
       me->zif_otel_context~root_context  = context->root_context.
     endif.
-    me->attributes = new #(  ).
+    me->value_map = new zcl_otel_map( ).
 
   endmethod.
 
-
-  METHOD zif_otel_has_attributes~attributes.
-
-    result = me->attributes.
-
-  ENDMETHOD.
-
-  METHOD from.
-
-
-
-
-  ENDMETHOD.
-
   METHOD zif_otel_context~get_value.
-
+    value = me->value_map->get( key ).
   ENDMETHOD.
 
   METHOD zif_otel_context~set_value.
+
+    me->value_map->set(
+      key   = key
+      value = value
+    ).
 
   ENDMETHOD.
 
   METHOD zif_otel_context~delete_value.
 
+    me->value_map->delete( key = key ).
+
   ENDMETHOD.
 
   METHOD zif_otel_context~get_entries.
+
+    entries = me->value_map->entries(
+*      receiving
+*        result =
+    ).
 
   ENDMETHOD.
 

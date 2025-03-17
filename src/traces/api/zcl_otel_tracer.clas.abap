@@ -33,7 +33,7 @@ class zcl_otel_tracer definition
 
       span_event
         exporting
-          value(span) type ref to zif_otel_span
+          value(span)        type ref to zif_otel_span
           value(span_event)  type ref to zif_otel_span_event
           value(stack_depth) type i .
 
@@ -74,8 +74,11 @@ class zcl_otel_tracer implementation.
 
   method zif_otel_tracer~start_span.
 
-    if context is not bound and default_context eq abap_true.
-      context = me->last_span( ).
+    if context is not bound.
+      data(last_span) = me->last_span( ).
+      if last_span is bound.
+        context = me->last_span( )->context.
+      endif.
     endif.
 
     data(span) = new zcl_otel_span(

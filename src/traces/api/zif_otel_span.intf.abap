@@ -1,10 +1,11 @@
 interface ZIF_OTEL_SPAN
   public .
 
-
   interfaces ZIF_OTEL_SPAN_CONTEXT .
+  interfaces zif_otel_has_context.
   interfaces zif_otel_has_attributes.
   aliases attributes for zif_otel_has_attributes~attributes.
+  aliases context for zif_otel_has_context~context.
 
   " Span Id
   aliases SPAN_ID
@@ -12,6 +13,8 @@ interface ZIF_OTEL_SPAN
   " Trace id
   aliases TRACE_ID
     for ZIF_OTEL_SPAN_CONTEXT~TRACE_ID .
+
+
 
   types SPAN_STATUS_TYPE type STRING .
 

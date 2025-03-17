@@ -93,7 +93,7 @@ class zcl_abap2otel_collector implementation.
     if log_record->context is bound.
       try.
           data(span_context) = cast zif_otel_span_context( log_record->context ).
-          data(span_context_data) = span_context->get_context( ).
+          data(span_context_data) = span_context->get_span_context( ).
         catch cx_sy_move_cast_error.
       endtry.
     endif.

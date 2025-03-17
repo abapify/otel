@@ -6,10 +6,11 @@ INTERFACE zif_otel_span_context
 
   types:
       begin of span_context_ts,
-      trace_id like trace_id,
-      span_id like span_id,
+          trace_id like trace_id,
+          span_id like span_id,
       end of span_context_ts.
-  methods get_context returning value(result) type span_context_ts.
+
+  methods get_span_context returning value(result) type span_context_ts.
 
 
 ENDINTERFACE.

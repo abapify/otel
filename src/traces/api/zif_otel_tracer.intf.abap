@@ -8,10 +8,9 @@ interface zif_otel_tracer
   methods start_span
     importing
       !name            type csequence
-      value(context)   type ref to zif_otel_span_context optional
-      !default_context type abap_bool optional
-      !stack_depth     type i default 1
+      value(context)   type ref to zif_otel_context optional
       !options         type zif_otel_span_options=>span_options optional
+      !stack_depth     type i default 1
     returning
       value(result)    type ref to zif_otel_span .
 endinterface.

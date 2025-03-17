@@ -17,7 +17,7 @@ interface ZIF_OTEL_MAP
   methods size returning value(result) type i.
   methods has importing key type csequence returning value(result) type abap_bool.
   methods keys returning value(result) type keys_tt.
-  methods values returning value(result) type values_tt.
+  methods values importing keys type keys_tt optional returning value(result) type values_tt.
   methods entries returning value(result) type entries_tt.
   methods clear.
   methods delete importing key type csequence.

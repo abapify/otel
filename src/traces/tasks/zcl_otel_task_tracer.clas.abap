@@ -42,7 +42,7 @@ CLASS ZCL_OTEL_TASK_TRACER IMPLEMENTATION.
 
         data(trace) = me->tracer.
         data(span_name) = task->span_name( ).
-        data(span) = trace->start_span( name = span_name default_context = default_context ).
+        data(span) = trace->start_span( name = span_name ).
         task->execute( span = span ).
         span->end( ).
       catch cx_root into data(lo_cx).

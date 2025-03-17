@@ -76,7 +76,10 @@ class zcl_otel_map implementation.
   endmethod.
 
   method zif_otel_map~values.
-    result = value #(  for entry in me->_entries ( entry-value ) ).
+    result = value #(  for entry in cond entries_tt(
+        when keys is not initial then filter #( me->_entries in keys where key = table_line )
+        else me->_entries
+    ) ( entry-value ) ).
   endmethod.
 
   method zif_otel_map~entries.

@@ -40,6 +40,7 @@ interface zif_otel_metric
     importing
       !value      type value_type
       !attributes type attributes_type optional
+      context type context_type optional
       " it's not yet clear how we should use context in metrics
       "CONTEXT type CONTEXT_TYPE optional1
 *    returning

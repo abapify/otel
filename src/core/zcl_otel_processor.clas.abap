@@ -5,7 +5,7 @@ class zcl_otel_processor definition
 
   public section.
     interfaces zif_otel_processor.
-    methods constructor importing collector type ref to zif_otel_collector.
+    methods constructor importing collector type ref to zif_otel_collector optional.
   protected section.
   private section.
     data collector type ref to zif_otel_collector.
@@ -16,6 +16,8 @@ endclass.
 class zcl_otel_processor implementation.
   method zif_otel_logs_processor~on_log_record_added.
 
+  check me->collector is bound.
+
     me->collector->add_log(
       logger     = logger
       log_record = log_record
@@ -24,7 +26,7 @@ class zcl_otel_processor implementation.
   endmethod.
 
   method zif_otel_metrics_processor~on_metric_value_added.
-
+ check me->collector is bound.
     me->collector->add_metric(
       meter      = meter
       metric     = metric
@@ -34,7 +36,7 @@ class zcl_otel_processor implementation.
   endmethod.
 
   method zif_otel_trace_processor~on_span_end.
-
+ check me->collector is bound.
     me->collector->add_trace(
       tracer = tracer
       span   = span

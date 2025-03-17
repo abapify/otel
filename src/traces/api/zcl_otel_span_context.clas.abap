@@ -1,7 +1,8 @@
 class zcl_otel_span_context definition
 inheriting from zcl_otel_context
-  public
   final
+  public
+
   create public .
 
   public section.
@@ -12,8 +13,8 @@ inheriting from zcl_otel_context
 
   methods constructor
     importing
-        trace_id like trace_id
-        span_id like span_id.
+        context type ref to zif_otel_context
+        span    type ref to zif_otel_span.
 
   protected section.
   private section.
@@ -24,13 +25,19 @@ endclass.
 
 class zcl_otel_span_context implementation.
   METHOD constructor.
-    super->constructor( ).
-    me->trace_id = trace_id.
-    me->span_id = span_id.
+    super->constructor( context = context ).
+    if span is bound.
+        me->trace_id = span->trace_id.
+        me->span_id = span->span_id.
+    endif.
   ENDMETHOD.
 
-  METHOD zif_otel_span_context~get_context.
-    result = value #(  trace_id = trace_id span_id = span_id ).
-  ENDMETHOD.
+  method zif_otel_span_context~get_span_context.
 
+    result = value #(
+        trace_id = me->zif_otel_span_context~trace_id
+        span_id = me->zif_otel_span_context~span_id
+    ).
+
+  endmethod.
 endclass.

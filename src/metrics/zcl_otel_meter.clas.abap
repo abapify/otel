@@ -99,4 +99,8 @@ class zcl_otel_meter implementation.
 
   endmethod.
 
+  method zif_otel_has_attributes~attributes.
+
+  endmethod.
+
 endclass.
