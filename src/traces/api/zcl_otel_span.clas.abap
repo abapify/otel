@@ -95,7 +95,8 @@ class zcl_otel_span implementation.
 
     me->zif_otel_has_context~context = new zcl_otel_span_context(
       context = context
-      span    = me
+      trace_id = me->trace_id
+      span_id = me->span_id
     ).
 
     me->name = name.

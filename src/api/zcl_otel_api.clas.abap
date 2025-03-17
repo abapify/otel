@@ -12,14 +12,19 @@ class zcl_otel_api definition
   protected section.
   private section.
 
-endclass.
+ENDCLASS.
 
-class zcl_otel_api implementation.
+
+
+CLASS ZCL_OTEL_API IMPLEMENTATION.
+
+
   method logs.
 
     result = zcl_otel=>api( scenario )->logs( ).
 
   endmethod.
+
 
   method metrics.
 
@@ -27,10 +32,10 @@ class zcl_otel_api implementation.
 
   endmethod.
 
+
   method traces.
 
    result = zcl_otel=>api( scenario )->trace( ).
 
   endmethod.
-
-endclass.
+ENDCLASS.
