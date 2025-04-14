@@ -48,11 +48,11 @@ class zcl_otel_span definition
         value(event)       type ref to zif_otel_span_event
         value(stack_depth) type i .
 
-endclass.
+ENDCLASS.
 
 
 
-class zcl_otel_span implementation.
+CLASS ZCL_OTEL_SPAN IMPLEMENTATION.
 
 
   method constructor.
@@ -64,7 +64,10 @@ class zcl_otel_span implementation.
       get time stamp field me->start_time.
     endif.
 
+*    " store given context
+    me->zif_otel_has_context~context = context.
 
+    " inherit trace_id and  span context
     if context is bound.
         try.
             data(span_context) = cast zif_otel_span_context( context ).
@@ -92,13 +95,6 @@ class zcl_otel_span implementation.
     " there is no out of the box function to generate 8-byte uuid
     me->span_id = lcl_randomizer=>generate_hex( 8 ).
 
-
-    me->zif_otel_has_context~context = new zcl_otel_span_context(
-      context = context
-      trace_id = me->trace_id
-      span_id = me->span_id
-    ).
-
     me->name = name.
 
     me->attributes = new zcl_otel_attribute_map( options-attributes ).
@@ -107,6 +103,7 @@ class zcl_otel_span implementation.
     me->zif_otel_span~kind = options-kind.
 
   endmethod.
+
 
   method zif_otel_has_attributes~attributes.
     result = me->attributes.
@@ -152,15 +149,18 @@ class zcl_otel_span implementation.
 
   method zif_otel_span~log.
 
-    data(event) = new lcl_span_event( ).
+    data(event) = new lcl_span_event( attributes = attributes ).
     event->name = name.
     event->span = me.
 
     append event to me->events.
 
+
+
     raise event span_event exporting event = event stack_depth = stack_depth + 1..
 
   endmethod.
+
 
   method zif_otel_span_context~get_span_context.
 
@@ -170,5 +170,4 @@ class zcl_otel_span implementation.
     ).
 
   endmethod.
-
-endclass.
+ENDCLASS.

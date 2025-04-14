@@ -44,7 +44,8 @@ endclass.
 class lcl_span_event definition friends zcl_otel_span.
   public section.
     interfaces zif_otel_span_event.
-    methods constructor.
+    methods constructor
+        importing attributes type zif_otel_attribute_map=>entries_tt.
   private section.
     aliases name for zif_otel_span_event~name.
     aliases span for zif_otel_span_event~span.
@@ -54,7 +55,7 @@ endclass.
 class lcl_span_event implementation.
 
   method constructor.
-    me->attributes = new zcl_otel_attribute_map( ).
+    me->attributes = new zcl_otel_attribute_map( attributes ).
   endmethod.
 
   method zif_otel_has_attributes~attributes.

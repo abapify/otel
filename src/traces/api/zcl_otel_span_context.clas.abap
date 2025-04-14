@@ -1,30 +1,31 @@
-class zcl_otel_span_context definition
-inheriting from zcl_otel_context
-  final
+class ZCL_OTEL_SPAN_CONTEXT definition
   public
+  inheriting from ZCL_OTEL_CONTEXT
 
   create public .
 
-  public section.
-    interfaces zif_otel_span_context.
+public section.
 
-    aliases trace_id for zif_otel_span_context~trace_id.
-    aliases span_id for zif_otel_span_context~span_id.
+  interfaces ZIF_OTEL_SPAN_CONTEXT .
 
-    methods constructor
-      importing
-        context  type ref to zif_otel_context optional
-        trace_id like trace_id
-        span_id  like span_id.
+  aliases SPAN_ID
+    for ZIF_OTEL_SPAN_CONTEXT~SPAN_ID .
+  aliases TRACE_ID
+    for ZIF_OTEL_SPAN_CONTEXT~TRACE_ID .
 
-  protected section.
+  methods CONSTRUCTOR
+    importing
+      !CONTEXT type ref to ZIF_OTEL_CONTEXT optional
+      !TRACE_ID like TRACE_ID optional
+      !SPAN_ID like SPAN_ID optional.
+protected section.
   private section.
 
-endclass.
+ENDCLASS.
 
 
 
-class zcl_otel_span_context implementation.
+CLASS ZCL_OTEL_SPAN_CONTEXT IMPLEMENTATION.
 
 
   method constructor.
@@ -43,6 +44,4 @@ class zcl_otel_span_context implementation.
     ).
 
   endmethod.
-
-
-endclass.
+ENDCLASS.

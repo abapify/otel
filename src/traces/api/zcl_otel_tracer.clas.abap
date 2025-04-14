@@ -77,7 +77,11 @@ class zcl_otel_tracer implementation.
     if context is not bound.
       data(last_span) = me->last_span( ).
       if last_span is bound.
-        context = me->last_span( )->context.
+         context = new zcl_otel_span_context(
+           context = last_span->context
+           trace_id = last_span->trace_id
+           span_id = last_span->span_id
+         ).
       endif.
     endif.
 

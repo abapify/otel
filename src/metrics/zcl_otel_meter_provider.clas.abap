@@ -29,11 +29,13 @@ class zcl_otel_meter_provider definition
         value(metric)     type ref to zif_otel_metric
         value(data_point) type ref to zif_otel_data_point.
 
-endclass.
+ENDCLASS.
 
 
 
-class zcl_otel_meter_provider implementation.
+CLASS ZCL_OTEL_METER_PROVIDER IMPLEMENTATION.
+
+
   method zif_otel_meter_provider~get_meter.
 
     " it should persist meters map according to the spec
@@ -47,12 +49,13 @@ class zcl_otel_meter_provider implementation.
 
         set handler on_metric_value_added for new_meter.
 
-        insert value #( name = name meter = meter ) into table me->meters.
+        insert value #( name = name meter = new_meter ) into table me->meters.
 
         meter = new_meter.
     endtry.
 
   endmethod.
+
 
   method on_metric_value_added.
 
@@ -63,5 +66,4 @@ class zcl_otel_meter_provider implementation.
        meter = sender.
 
   endmethod.
-
-endclass.
+ENDCLASS.

@@ -49,7 +49,8 @@ interface ZIF_OTEL_SPAN
   methods LOG
     importing
       !NAME type STRING
-      stack_depth type i optional.
+      stack_depth type i optional
+      attributes type zif_otel_attribute_map=>entries_tt optional.
   methods LINK
     importing
       !CONTEXT type ref to ZIF_OTEL_SPAN_CONTEXT .

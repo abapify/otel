@@ -2,6 +2,7 @@ class zcl_otel_attribute_map definition  public
   create public .
 
   public section.
+
     interfaces zif_otel_attribute_map.
     aliases attribute for zif_otel_attribute_map~attribute.
     aliases get for zif_otel_attribute_map~attribute.
